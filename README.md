@@ -21,7 +21,7 @@ The project emphasizes controlled experimental comparisons, reproducibility, and
 
 
 
-### Part I — Language Model Comparison
+### 2.1 Language Model Comparison
 
 The following language models will be trained on a common English corpus:
 
@@ -32,9 +32,9 @@ The following language models will be trained on a common English corpus:
 
 Evaluation will cover next-token cross-entropy or perplexity, training and inference costs, learning curves, and generated text.
 
-### Part II — Embedding Ablation
+### 2.2 Embedding Ablation
 
-One neural architecture from Part I will be evaluated with three embedding configurations:
+One neural architecture from the language model comparison will be evaluated with three embedding configurations:
 
 - Randomly initialized, trainable embeddings
 - Self-trained, frozen word embeddings (e.g., Skip-gram)
@@ -42,7 +42,7 @@ One neural architecture from Part I will be evaluated with three embedding confi
 
 Embedding dimensions, architecture, training data, and training procedures will be controlled across configurations.
 
-### Part III — Downstream Representation Analysis
+### 2.3 Downstream Representation Analysis
 
 Representations from previously trained language models will be evaluated using a supervised text classification task.
 
@@ -87,12 +87,11 @@ OOV rates exclude special tokens. Dataset statistics reflect the current preproc
 ## 4. Repository Structure
 
 ```text
-nlp-individual-project/
+nlp-language-model-comparison//
 ├── README.md
 ├── configs/
 ├── data/
 │   └── processed/       # Generated locally, excluded from Git
-├── docs/                # Experiment logs and documentation
 ├── reports/             # Final report
 ├── results/             # Evaluation results and figures
 ├── scripts/             # Experiment entry points
@@ -125,8 +124,6 @@ Development environment:
 - PyTorch MPS backend available
 
 Core numerical and data-processing libraries are managed through conda-forge. PyTorch is installed through pip inside the Conda environment.
-
-The current environment uses a pthreads-based OpenBLAS build to avoid an observed OpenMP runtime initialization conflict.
 
 ### Current Data Preparation Commands
 
@@ -180,11 +177,11 @@ Random seeds, final hyperparameters, dependency versions, model checkpoints, and
 ## 8. Data Sources and Acknowledgments
 
 - WikiText-2 dataset: [Salesforce/wikitext](https://huggingface.co/datasets/Salesforce/wikitext)
-- PyTorch: [https://pytorch.org/](https://pytorch.org/)
-- Hugging Face Datasets: [https://huggingface.co/docs/datasets/](https://huggingface.co/docs/datasets/)
+- PyTorch: [Official Website](https://pytorch.org/)
+- Hugging Face Datasets: [Documentation](https://huggingface.co/docs/datasets/)
 
-This project is developed for an individual university assignment. Standard libraries, documentation, and AI-assisted coding support are used during development. External assistance and implementation references will be documented in the final submission.
+This project explores language modeling, word embeddings, and representation learning through reproducible experiments. Standard libraries, documentation, and AI-assisted coding support are used during development. External assistance and implementation references will be documented in the project documentation.
 
 ## 9. License
 
-No license has been assigned at this stage. The repository is maintained as a private academic project during assignment development.
+No license has been assigned at this stage. The repository is currently maintained as a private research project.
