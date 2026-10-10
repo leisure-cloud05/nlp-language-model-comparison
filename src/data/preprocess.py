@@ -21,7 +21,9 @@ PROJECT_ROOT = Path(__file__).resolve().parents[2]
 OUTPUT_DIR = PROJECT_ROOT / "data" / "processed"
 
 TOKEN_PATTERN = re.compile(r"\w+|[^\w\s]", re.UNICODE)
-HEADING_PATTERN = re.compile(r"^\s*=+\s+.+?\s+=+\s*$")
+HEADING_PATTERN = re.compile(
+    r"^((?:=\s*)+)(.+?)\s+((?:=\s*)+)$"
+)
 
 
 # Text processing
@@ -40,12 +42,14 @@ def tokenize(text):
     return TOKEN_PATTERN.findall(text)
 
 
+
 def extract_documents(text_rows):
     """
-    Split WikiText rows into documents.
+    Split WikiText into documents using level-1 headings.
 
-    Top-level headings start new documents.
-    Non-empty ordinary lines end with <eos>.
+    Level-1 headings start new documents.
+    Other heading levels are skipped.
+    Non-empty text lines end with <eos>.
     """
     documents = []
     current_document = []
@@ -56,17 +60,22 @@ def extract_documents(text_rows):
         if not text:
             continue
 
-        if HEADING_PATTERN.match(text):
-            # Only a top-level heading starts a new document.
-            heading_level = len(text) - len(text.lstrip("="))
+        match = HEADING_PATTERN.fullmatch(text)
 
-            if heading_level == 1:
-                if current_document:
-                    documents.append(current_document)
-                current_document = []
+        if match:
+            left_level = match.group(1).count("=")
+            right_level = match.group(3).count("=")
 
-            # Skip heading markup from the language-model corpus.
-            continue
+            # Only treat valid headings with matching levels
+            if left_level == right_level:
+                if left_level == 1:
+                    if current_document:
+                        documents.append(current_document)
+
+                    current_document = []
+
+                # Skip all heading text
+                continue
 
         tokens = tokenize(text)
 
@@ -78,6 +87,7 @@ def extract_documents(text_rows):
         documents.append(current_document)
 
     return documents
+
 
 
 # =========================
