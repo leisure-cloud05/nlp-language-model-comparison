@@ -218,3 +218,27 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# macOS
+.DS_Store
+
+# Dataset files
+/data/raw/
+/data/processed/
+/data/cache/
+
+# Model checkpoints
+*.pt
+*.pth
+*.ckpt
+
+# Local experiment logs
+/logs/
+/runs/
+
+# macOS
+.DS_Store
+
+# Environment variables and credentials
+.env
+.env.*
