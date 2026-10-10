@@ -99,12 +99,25 @@ def test_real_data():
     assert len(vocab) == 20000
     assert vocab["<pad>"] == 0
     assert vocab["<unk>"] == 1
-    assert vocab["<eos>"] == 2
+    assert vocab["<bos>"] == 2
+    assert vocab["<eos>"] == 3
 
     print(f"Vocabulary size: {len(vocab)}")
 
     for split in ["train", "validation", "test"]:
         documents = load_documents(split)
+        bos_id = vocab["<bos>"]
+        eos_id = vocab["<eos>"]
+
+        assert all(doc[0] == bos_id for doc in documents)
+        assert all(doc[-1] == eos_id for doc in documents)
+
+        assert all(
+            bos_id not in doc[1:] and eos_id not in doc[:-1]
+            for doc in documents
+        )
+
+        print(f"{split}: BOS/EOS boundaries - PASS")        
 
         assert len(documents) > 0
 

@@ -13,9 +13,10 @@ VOCAB_SIZE = 20000
 
 PAD_TOKEN = "<pad>"
 UNK_TOKEN = "<unk>"
+BOS_TOKEN = "<bos>"
 EOS_TOKEN = "<eos>"
 
-SPECIAL_TOKENS = [PAD_TOKEN, UNK_TOKEN, EOS_TOKEN]
+SPECIAL_TOKENS = [PAD_TOKEN, UNK_TOKEN, BOS_TOKEN, EOS_TOKEN]
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 OUTPUT_DIR = PROJECT_ROOT / "data" / "processed"
@@ -43,16 +44,24 @@ def tokenize(text):
 
 
 
+
 def extract_documents(text_rows):
     """
     Split WikiText into documents using level-1 headings.
 
-    Level-1 headings start new documents.
-    Other heading levels are skipped.
-    Non-empty text lines end with <eos>.
+    - Level-1 headings start new documents.
+    - Other headings are skipped.
+    - Add one <bos> and one <eos> per document.
+    - Do not insert special tokens at line boundaries.
     """
     documents = []
     current_document = []
+
+    def finish_document():
+        if current_document:
+            documents.append(
+                [BOS_TOKEN] + current_document + [EOS_TOKEN]
+            )
 
     for raw_text in text_rows:
         text = raw_text.strip()
@@ -66,33 +75,25 @@ def extract_documents(text_rows):
             left_level = match.group(1).count("=")
             right_level = match.group(3).count("=")
 
-            # Only treat valid headings with matching levels
             if left_level == right_level:
                 if left_level == 1:
-                    if current_document:
-                        documents.append(current_document)
-
+                    finish_document()
                     current_document = []
 
-                # Skip all heading text
+                # Skip heading text at all levels
                 continue
 
         tokens = tokenize(text)
 
         if tokens:
             current_document.extend(tokens)
-            current_document.append(EOS_TOKEN)
 
-    if current_document:
-        documents.append(current_document)
+    finish_document()
 
     return documents
 
 
-
-# =========================
 # Vocabulary
-# =========================
 
 def build_vocabulary(train_documents):
     counter = Counter()

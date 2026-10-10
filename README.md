@@ -62,10 +62,12 @@ The official training, validation, and test splits are retained.
 - WikiText formatting markers normalized
 - Vocabulary built exclusively from training data
 - Vocabulary size: 20,000
-- Special tokens: `<pad>`, `<unk>`, `<eos>`
+- Special tokens: `<pad>`, `<unk>`, `<bos>`, `<eos>`
+- One `<bos>` token prepended to each document
+- One `<eos>` token appended to each document
+- Document-internal punctuation preserved
 - Level-1 headings used to identify document boundaries
 - Higher-level headings excluded from the language-model corpus
-- `<eos>` appended to non-empty text lines
 - Documents encoded and stored independently
 
 The initial fixed-window next-token dataset uses a maximum of 64 target positions per sample. Padding labels are set to `-100` for exclusion from the loss.
@@ -76,10 +78,10 @@ The initial fixed-window next-token dataset uses a maximum of 64 target position
 | Statistic                      | Train     | Validation | Test    |
 | ------------------------------ | --------- | ---------- | ------- |
 | Documents                      | 629       | 60         | 62      |
-| Token IDs                      | 2,049,189 | 213,850    | 240,475 |
+| Token IDs                      | 2,032,891 | 212,129    | 238,414 |
 | OOV rate                       | 5.07%     | 7.57%      | 8.10%   |
-| Next-token samples (length 64) | 32,325    | 3,367      | 3,790   |
-| Prediction targets             | 2,048,560 | 213,790    | 240,413 |
+| Next-token samples (length 64) | 32,085    | 3,347      | 3,755   |
+| Prediction targets             | 2,032,262 | 212,069    | 238,352 |
 
 
 OOV rates exclude special tokens. Dataset statistics reflect the current preprocessing implementation.
@@ -87,7 +89,7 @@ OOV rates exclude special tokens. Dataset statistics reflect the current preproc
 ## 4. Repository Structure
 
 ```text
-nlp-language-model-comparison//
+nlp-language-model-comparison/
 ├── README.md
 ├── configs/
 ├── data/
@@ -170,7 +172,7 @@ The vocabulary is built only from the training split, and document boundaries ar
 
 The current dataset implementation treats fixed windows independently. Recurrent model states will not automatically carry across windows. Model-specific context limitations and evaluation procedures will be documented before final comparisons.
 
-The preprocessing pipeline discards heading text and uses line-level end markers. This is a deliberate simplification and may affect language modeling results.
+The preprocessing pipeline discards heading text and uses document-level beginning and end markers. This is a deliberate simplification and may affect language modeling results.
 
 Random seeds, final hyperparameters, dependency versions, model checkpoints, and evaluation settings will be recorded as model experiments are completed.
 
