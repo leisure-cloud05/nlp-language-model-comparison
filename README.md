@@ -276,7 +276,7 @@ Generated results are saved under `results/`. Model checkpoints are saved locall
 - [x] Implement next-token dataset and padding
 - [x] Validate dataset samples and target coverage
 - [x] Train and evaluate n-gram model
-- [ ] Train and evaluate RNN
+- [x] Train and evaluate RNN
 - [ ] Train and evaluate LSTM
 - [ ] Train and evaluate causal Transformer
 - [ ] Complete embedding ablation experiments
