@@ -1,0 +1,45 @@
+{
+  "model": "lstm",
+  "checkpoint": "lstm_best.pt",
+  "best_epoch": 4,
+  "generation_config": {
+    "seed": 42,
+    "max_new_tokens": 40,
+    "temperature": 1.0,
+    "top_k": 20,
+    "exclude_unk": false
+  },
+  "samples": [
+    {
+      "prompt": "The history of",
+      "prompt_oov_tokens": [],
+      "generated_text": "The history of the <unk> of the Year of Pennsylvania , <unk> , <unk> , <unk> , <unk> , <unk> , and <unk> ( <unk> ) , but <unk> <unk> ( c . 4 / 51 in ) and other <unk> and <unk>",
+      "num_generated_tokens": 40,
+      "generation_seconds": 0.16471670800819993,
+      "tokens_per_second": 242.8411815880191,
+      "stopped_at_eos": false
+    },
+    {
+      "prompt": "In the city of",
+      "prompt_oov_tokens": [],
+      "generated_text": "In the city of Haifa , the <unk> of the <unk> of <unk> , the <unk> <unk> al - <unk> , the <unk> <unk> de <unk> <unk> ( c . <unk> ) , <unk> , ( A . 5 – 12 , <unk> )",
+      "num_generated_tokens": 40,
+      "generation_seconds": 0.053477375011425465,
+      "tokens_per_second": 747.9798698319427,
+      "stopped_at_eos": false
+    },
+    {
+      "prompt": "The first",
+      "prompt_oov_tokens": [],
+      "generated_text": "The first game was also recorded by the number of the <unk> <unk> of <unk> . The first three of its performance was not included on the same time , the game began to <unk> the second best of the year .",
+      "num_generated_tokens": 40,
+      "generation_seconds": 0.0539687909767963,
+      "tokens_per_second": 741.1690956204275,
+      "stopped_at_eos": false
+    }
+  ],
+  "total_generated_tokens": 120,
+  "total_generation_seconds": 0.2721628739964217,
+  "overall_tokens_per_second": 440.91245156963515,
+  "device": "mps"
+}

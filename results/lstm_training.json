@@ -1,0 +1,59 @@
+{
+  "model": "lstm",
+  "dataset": "wikitext-2-raw-v1",
+  "seed": 42,
+  "config": {
+    "embedding_dim": 128,
+    "hidden_dim": 256,
+    "num_layers": 1,
+    "batch_size": 16,
+    "seq_len": 64,
+    "learning_rate": 0.001,
+    "epochs": 4,
+    "grad_clip": 1.0
+  },
+  "parameters": 8095264,
+  "history": [
+    {
+      "epoch": 1,
+      "train_ce": 6.0729571897066315,
+      "val_ce": 5.504555841881799,
+      "val_ppl": 245.80921936035156,
+      "train_targets": 2032262,
+      "val_targets": 212069,
+      "train_seconds": 70.4302418329753,
+      "val_seconds": 1.7454293749760836
+    },
+    {
+      "epoch": 2,
+      "train_ce": 5.403665272246324,
+      "val_ce": 5.267733083709083,
+      "val_ppl": 193.97573852539062,
+      "train_targets": 2032262,
+      "val_targets": 212069,
+      "train_seconds": 71.00343375001103,
+      "val_seconds": 1.8202839160221629
+    },
+    {
+      "epoch": 3,
+      "train_ce": 5.082184057522787,
+      "val_ce": 5.142227358991391,
+      "val_ppl": 171.09640502929688,
+      "train_targets": 2032262,
+      "val_targets": 212069,
+      "train_seconds": 72.52610920899315,
+      "val_seconds": 1.6536395840230398
+    },
+    {
+      "epoch": 4,
+      "train_ce": 4.851819556786124,
+      "val_ce": 5.081605966181242,
+      "val_ppl": 161.03245544433594,
+      "train_targets": 2032262,
+      "val_targets": 212069,
+      "train_seconds": 71.49006687494693,
+      "val_seconds": 1.788711166009307
+    }
+  ],
+  "best_val_ce": 5.081605966181242
+}

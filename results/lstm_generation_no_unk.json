@@ -1,0 +1,45 @@
+{
+  "model": "lstm",
+  "checkpoint": "lstm_best.pt",
+  "best_epoch": 4,
+  "generation_config": {
+    "seed": 42,
+    "max_new_tokens": 40,
+    "temperature": 1.0,
+    "top_k": 20,
+    "exclude_unk": true
+  },
+  "samples": [
+    {
+      "prompt": "The history of",
+      "prompt_oov_tokens": [],
+      "generated_text": "The history of the city is a number of times , with the city ' s population in the area , in which is located in the centre of the city in which was used as by the king . It also used",
+      "num_generated_tokens": 40,
+      "generation_seconds": 0.1702927919686772,
+      "tokens_per_second": 234.88956600909685,
+      "stopped_at_eos": false
+    },
+    {
+      "prompt": "In the city of",
+      "prompt_oov_tokens": [],
+      "generated_text": "In the city of Mexico , the Missouri River was a member of the town of the village , the storm damaged the area near the town , in Mexico . The depression moved into Mexico from the town of Ireland . The highway",
+      "num_generated_tokens": 40,
+      "generation_seconds": 0.05516179197002202,
+      "tokens_per_second": 725.1396042706194,
+      "stopped_at_eos": false
+    },
+    {
+      "prompt": "The first",
+      "prompt_oov_tokens": [],
+      "generated_text": "The first game was in \" Promiscuous \" a single - based on - home dad . \" Crazy in his opinion , it \" a lot of the same , one or more than a way ? \" He has been",
+      "num_generated_tokens": 40,
+      "generation_seconds": 0.053062791004776955,
+      "tokens_per_second": 753.8238988672688,
+      "stopped_at_eos": false
+    }
+  ],
+  "total_generated_tokens": 120,
+  "total_generation_seconds": 0.27851737494347617,
+  "overall_tokens_per_second": 430.85283287749445,
+  "device": "mps"
+}

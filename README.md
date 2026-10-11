@@ -74,6 +74,64 @@ UNK-filtered sampling improved the readability of generated text, although gramm
 
 Training time includes the measured four training epochs and validation passes, excluding preprocessing and initialization. Generation throughput was measured after an initial MPS warmup. Throughput comparisons with the CPU-based Trigram reflect different implementations and hardware backends.
 
+#### LSTM Baseline Results
+
+A single-layer LSTM with trainable embeddings was trained on WikiText-2 using PyTorch and the Apple Silicon MPS backend, following the same preprocessing and training configuration as the Vanilla RNN.
+
+| Metric | Result |
+|---|---:|
+| Trainable Parameters | 8,095,264 |
+| Best Epoch | 4 |
+| Validation Perplexity | 161.03 |
+| Test Cross-Entropy | 5.0448 |
+| Test Perplexity | 155.21 |
+| Training and Validation Time | ~292.4 s |
+| Checkpoint Size | 30.88 MiB |
+| Evaluation Throughput | 117,314 tokens/s |
+| Generation Throughput (original Top-k) | 440.9 tokens/s |
+| Generation Throughput (UNK-filtered Top-k) | 430.9 tokens/s |
+
+The model uses 128-dimensional trainable embeddings, a 256-dimensional hidden state, and independent sequence windows of up to 64 tokens. The best checkpoint was selected using validation cross-entropy.
+
+The LSTM achieved lower test perplexity than the Vanilla RNN (155.21 vs. 169.98), although it used more trainable parameters.
+
+Text generation was evaluated using the same three prompts and Top-k sampling settings as the RNN. UNK-filtered sampling improved readability, but the generated text still showed repetition and semantic inconsistencies.
+
+Training time includes four training epochs and validation passes. Generation throughput was measured after MPS warmup. Reported efficiency measurements are specific to the current hardware and implementation.
+
+#### From-Scratch Recurrent Model Implementations
+
+In addition to the benchmark models, this project includes implementations of recurrent architectures using PyTorch tensor operations.
+
+**Vanilla RNN (completed)**
+
+- Implemented the recurrent update manually using learnable input-to-hidden and hidden-to-hidden parameters.
+- Used the tanh activation and explicitly iterated over sequence positions.
+- Verified numerical consistency with PyTorch's `nn.RNN` after copying identical weights and biases.
+- Confirmed that forward outputs, final hidden states, input gradients, hidden-state gradients, and parameter gradients match within numerical tolerance.
+- Verified the default zero-initialized hidden state.
+
+The from-scratch implementation is intended for algorithm understanding and correctness verification. The main language-model benchmark continues to use PyTorch's optimized `nn.RNN` for training and efficiency measurements.
+
+**LSTM (completed)**
+
+- Implemented the input, forget, candidate, and output gates manually using PyTorch tensor operations.
+- Explicitly computed hidden-state and cell-state updates across sequence positions.
+- Verified numerical consistency with PyTorch's `nn.LSTM` after copying identical parameters.
+- Confirmed matching forward outputs, final hidden and cell states, input and initial-state gradients, and parameter gradients within numerical tolerance.
+- Verified the default zero-initialized hidden and cell states.
+
+The main LSTM benchmark uses PyTorch's optimized `nn.LSTM` for training and efficiency measurements. The manual implementation is used for algorithm understanding and correctness verification.
+
+**Implementation files:**
+
+- `src/models/rnn_from_scratch.py`
+- `tests/test_rnn_from_scratch.py`
+- `src/models/lstm_from_scratch.py`
+- `tests/test_lstm_from_scratch.py`
+
+The manual implementations are separate from the benchmark models and do not change the reported training or evaluation results.
+
 ### 2.2 Embedding Ablation
 
 One neural architecture from the language model comparison will be evaluated with three embedding configurations:
@@ -145,7 +203,11 @@ nlp-language-model-comparison/
 │   ├── smoke_test_rnn.py
 │   ├── train_rnn.py
 │   ├── evaluate_rnn.py
-│   └── generate_rnn.py
+│   ├── generate_rnn.py
+│   ├── smoke_test_lstm.py
+│   ├── train_lstm.py
+│   ├── evaluate_lstm.py
+│   └── generate_lstm.py
 ├── src/
 │   ├── data/
 │   │   ├── prepare_data.py
@@ -155,14 +217,20 @@ nlp-language-model-comparison/
 │   │   └── lm_dataset.py
 │   ├── models/
 │   │   ├── ngram.py
-│   │   └── rnn.py
+│   │   ├── rnn.py
+│   │   ├── rnn_from_scratch.py
+│   │   ├── lstm.py
+│   │   └── lstm_from_scratch.py
 │   ├── embeddings/
 │   ├── training/
 │   └── evaluation/
 └── tests/
     ├── test_lm_dataset.py
     ├── test_ngram.py
-    └── test_rnn.py
+    ├── test_rnn.py
+    ├── test_rnn_from_scratch.py
+    ├── test_lstm.py
+    └── test_lstm_from_scratch.py
 ```
 
 Some directories and experiment modules are reserved for later development.
@@ -265,6 +333,53 @@ Set `EXCLUDE_UNK = False` in `scripts/generate_rnn.py` for original Top-k sampli
 
 Generated results are saved under `results/`. Model checkpoints are saved locally under `checkpoints/` and excluded from Git.
 
+### LSTM Experiment Commands
+
+Run the model correctness tests:
+
+```bash
+python tests/test_lstm.py
+```
+
+Run the small-scale training test:
+
+```bash
+python scripts/smoke_test_lstm.py
+```
+
+Train the LSTM and select the best checkpoint using validation cross-entropy:
+
+```bash
+python scripts/train_lstm.py
+```
+
+Evaluate the saved checkpoint on the test set:
+
+```bash
+python scripts/evaluate_lstm.py
+```
+
+Generate text using the saved checkpoint:
+
+```bash
+python scripts/generate_lstm.py
+```
+
+Set `EXCLUDE_UNK = False` in `scripts/generate_lstm.py` for original Top-k sampling, or `EXCLUDE_UNK = True` for UNK-filtered Top-k sampling.
+
+The two generation modes save results to separate JSON files under `results/`. Model checkpoints are stored locally under `checkpoints/` and excluded from Git.
+
+### From-Scratch Recurrent Model Verification
+
+Verify the manually implemented recurrent architectures against PyTorch reference implementations:
+
+```bash
+python tests/test_rnn_from_scratch.py
+python tests/test_lstm_from_scratch.py
+```
+
+These tests compare forward outputs, recurrent states, and backward gradients without retraining the benchmark models.
+
 ## 6. Current Progress
 
 - [x] Initialize GitHub repository
@@ -277,7 +392,7 @@ Generated results are saved under `results/`. Model checkpoints are saved locall
 - [x] Validate dataset samples and target coverage
 - [x] Train and evaluate n-gram model
 - [x] Train and evaluate RNN
-- [ ] Train and evaluate LSTM
+- [x] Train and evaluate LSTM
 - [ ] Train and evaluate causal Transformer
 - [ ] Complete embedding ablation experiments
 - [ ] Evaluate downstream representations
