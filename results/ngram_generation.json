@@ -1,0 +1,46 @@
+{
+  "model": "interpolated_trigram",
+  "hyperparameters": {
+    "alpha": 10.0,
+    "tau2": 320.0,
+    "tau3": 320.0
+  },
+  "generation_config": {
+    "seed": 42,
+    "max_new_tokens": 40,
+    "temperature": 1.0,
+    "top_k": 20
+  },
+  "samples": [
+    {
+      "prompt": "The history of",
+      "prompt_oov_tokens": [],
+      "generated_text": "The history of the <unk> <unk> , who has \" . <unk> , <unk> <unk> , <unk> and <unk> , a series of surveys in the <unk> that he was a strong tropical , \" and then , but his career he <unk>",
+      "num_generated_tokens": 40,
+      "generation_seconds": 0.8316045840037987,
+      "tokens_per_second": 48.09978296105362,
+      "stopped_at_eos": false
+    },
+    {
+      "prompt": "In the city of",
+      "prompt_oov_tokens": [],
+      "generated_text": "In the city of a <unk> <unk> <unk> , <unk> , and that he had been a very difficult , and it was not always in the same way in the <unk> <unk> <unk> , an additional , a new direction , the <unk>",
+      "num_generated_tokens": 40,
+      "generation_seconds": 0.8063458749675192,
+      "tokens_per_second": 49.60650415879074,
+      "stopped_at_eos": false
+    },
+    {
+      "prompt": "The first",
+      "prompt_oov_tokens": [],
+      "generated_text": "The first part of the original game ' K . The <unk> of <unk> ' s <unk> <unk> is <unk> ' <unk> , who has a <unk> - <unk> - <unk> from their own , and also has been in a <unk>",
+      "num_generated_tokens": 40,
+      "generation_seconds": 0.7974296670290641,
+      "tokens_per_second": 50.161163615877996,
+      "stopped_at_eos": false
+    }
+  ],
+  "total_generated_tokens": 120,
+  "total_generation_seconds": 2.435380126000382,
+  "overall_tokens_per_second": 49.27362210065977
+}

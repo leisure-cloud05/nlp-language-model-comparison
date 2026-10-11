@@ -1,0 +1,69 @@
+{
+  "model": "interpolated_trigram",
+  "dataset": "wikitext-2-raw-v1",
+  "vocab_size": 20000,
+  "context_size": 2,
+  "training_seconds": 1.602163041010499,
+  "model_statistics": {
+    "unigrams": 19998,
+    "bigrams": 537968,
+    "trigrams": 1310045,
+    "training_targets": 2032262
+  },
+  "validation_search": [
+    {
+      "alpha": 5.0,
+      "tau2": 320.0,
+      "tau3": 320.0,
+      "cross_entropy": 5.581613428350788,
+      "perplexity": 265.4996250263296,
+      "num_targets": 212069,
+      "evaluation_seconds": 0.23421491601038724
+    },
+    {
+      "alpha": 10.0,
+      "tau2": 320.0,
+      "tau3": 320.0,
+      "cross_entropy": 5.5793644821805675,
+      "perplexity": 264.9032015749307,
+      "num_targets": 212069,
+      "evaluation_seconds": 0.23493379197316244
+    },
+    {
+      "alpha": 20.0,
+      "tau2": 320.0,
+      "tau3": 320.0,
+      "cross_entropy": 5.579431839730691,
+      "perplexity": 264.9210454065602,
+      "num_targets": 212069,
+      "evaluation_seconds": 0.22830408299341798
+    },
+    {
+      "alpha": 50.0,
+      "tau2": 320.0,
+      "tau3": 320.0,
+      "cross_entropy": 5.59081842063221,
+      "perplexity": 267.95482975957464,
+      "num_targets": 212069,
+      "evaluation_seconds": 0.2306657920125872
+    },
+    {
+      "alpha": 100.0,
+      "tau2": 320.0,
+      "tau3": 320.0,
+      "cross_entropy": 5.614056385316296,
+      "perplexity": 274.25446651601334,
+      "num_targets": 212069,
+      "evaluation_seconds": 0.23454470897559077
+    }
+  ],
+  "best_validation": {
+    "alpha": 10.0,
+    "tau2": 320.0,
+    "tau3": 320.0,
+    "cross_entropy": 5.5793644821805675,
+    "perplexity": 264.9032015749307,
+    "num_targets": 212069,
+    "evaluation_seconds": 0.23493379197316244
+  }
+}

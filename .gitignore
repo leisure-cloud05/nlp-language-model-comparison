@@ -245,3 +245,6 @@ __marimo__/
 
 # Personal experiment notes
 /docs/experiment_log.md
+
+# Checkpoints
+/checkpoints/

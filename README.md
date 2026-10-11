@@ -32,6 +32,23 @@ The following language models will be trained on a common English corpus:
 
 Evaluation will cover next-token cross-entropy or perplexity, training and inference costs, learning curves, and generated text.
 
+#### Trigram Baseline Results
+
+The interpolated Trigram language model has been implemented and evaluated on WikiText-2.
+
+| Metric | Result |
+|---|---:|
+| Validation Perplexity | 264.90 |
+| Test Perplexity | 258.38 |
+| Training Time | 1.61 s |
+| Serialized Model Size | 24.01 MiB |
+| Evaluation Throughput | 934,666 tokens/s |
+| Generation Throughput | 49.3 tokens/s |
+
+The model uses recursive interpolated smoothing with document-level BOS padding. Smoothing parameters were selected using the validation split.
+
+Training time measures n-gram counting on preprocessed data. Evaluation throughput measures CPU-based token scoring, while generation throughput includes full-vocabulary probability computation and top-k sampling.
+
 ### 2.2 Embedding Ablation
 
 One neural architecture from the language model comparison will be evaluated with three embedding configurations:
@@ -96,7 +113,10 @@ nlp-language-model-comparison/
 │   └── processed/       # Generated locally, excluded from Git
 ├── reports/             # Final report
 ├── results/             # Evaluation results and figures
-├── scripts/             # Experiment entry points
+├── scripts/
+│   ├── run_ngram.py
+│   ├── evaluate_ngram.py
+│   └── generate_ngram.py
 ├── src/
 │   ├── data/
 │   │   ├── prepare_data.py
@@ -105,11 +125,13 @@ nlp-language-model-comparison/
 │   │   ├── preprocess.py
 │   │   └── lm_dataset.py
 │   ├── models/
+│   │   └── ngram.py
 │   ├── embeddings/
 │   ├── training/
 │   └── evaluation/
 └── tests/
-    └── test_lm_dataset.py
+    ├── test_lm_dataset.py
+    └── test_ngram.py
 ```
 
 Some directories and experiment modules are reserved for later development.
@@ -144,7 +166,37 @@ python tests/test_lm_dataset.py
 
 The scripts use Hugging Face Datasets to obtain the corpus. Running the preprocessing script generates the encoded documents and vocabulary under `data/processed/`.
 
-Complete dependency specifications and model training commands will be documented as experiments are implemented.
+Complete dependency specifications and additional model training commands will be documented as experiments are implemented.
+
+### Trigram Experiment Commands
+
+Run the correctness tests:
+
+```bash
+python tests/test_ngram.py
+```
+
+Run validation hyperparameter search:
+
+```bash
+python scripts/run_ngram.py
+```
+
+Evaluate the selected model and save or load the local checkpoint:
+
+```bash
+python scripts/evaluate_ngram.py
+```
+
+Generate text using the saved checkpoint:
+
+```bash
+python scripts/generate_ngram.py
+```
+
+Model checkpoints are stored locally under `checkpoints/` and excluded from Git.
+
+**Note:** The current validation script only runs its configured candidate set, rather than automatically reproducing all stages of the original hyperparameter search.
 
 ## 6. Current Progress
 
@@ -156,7 +208,7 @@ Complete dependency specifications and model training commands will be documente
 - [x] Correct document boundary detection
 - [x] Implement next-token dataset and padding
 - [x] Validate dataset samples and target coverage
-- [ ] Train and evaluate n-gram model
+- [x] Train and evaluate n-gram model
 - [ ] Train and evaluate RNN
 - [ ] Train and evaluate LSTM
 - [ ] Train and evaluate causal Transformer

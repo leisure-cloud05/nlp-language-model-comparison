@@ -1,0 +1,34 @@
+{
+  "model": "interpolated_trigram",
+  "dataset": "wikitext-2-raw-v1",
+  "vocab_size": 20000,
+  "context_size": 2,
+  "hyperparameters": {
+    "alpha": 10.0,
+    "tau2": 320.0,
+    "tau3": 320.0
+  },
+  "training_seconds": 1.562366165977437,
+  "model_statistics": {
+    "unigrams": 19998,
+    "bigrams": 537968,
+    "trigrams": 1310045,
+    "training_targets": 2032262
+  },
+  "validation": {
+    "cross_entropy": 5.5793644821805675,
+    "perplexity": 264.9032015749307,
+    "num_targets": 212069
+  },
+  "test": {
+    "cross_entropy": 5.554417941688846,
+    "perplexity": 258.3765305371395,
+    "num_targets": 238352
+  },
+  "test_evaluation_seconds": 0.2820747909718193,
+  "evaluation_tokens_per_second": 844995.7515835315,
+  "serialized_model_size_bytes": 25181013,
+  "serialized_model_size_mib": 24.014485359191895,
+  "size_measurement": "pickle serialized size",
+  "throughput_measurement": "CPU evaluation of the test corpus; includes Python probability and NLL computation"
+}
