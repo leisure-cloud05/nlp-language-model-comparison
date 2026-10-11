@@ -1,0 +1,25 @@
+{
+  "model": "vanilla_rnn",
+  "best_epoch": 4,
+  "config": {
+    "embedding_dim": 128,
+    "hidden_dim": 256,
+    "num_layers": 1,
+    "batch_size": 16,
+    "seq_len": 64,
+    "learning_rate": 0.001,
+    "epochs": 4,
+    "grad_clip": 1.0
+  },
+  "parameters": 7798816,
+  "test": {
+    "cross_entropy": 5.135675395856234,
+    "perplexity": 169.979084283789,
+    "num_targets": 238352
+  },
+  "evaluation_seconds": 2.643698250001762,
+  "evaluation_tokens_per_second": 90158.54967556949,
+  "checkpoint_size_bytes": 31198942,
+  "checkpoint_size_mib": 29.753629684448242,
+  "device": "mps"
+}

@@ -43,11 +43,36 @@ The interpolated Trigram language model has been implemented and evaluated on Wi
 | Training Time | 1.61 s |
 | Serialized Model Size | 24.01 MiB |
 | Evaluation Throughput | 934,666 tokens/s |
-| Generation Throughput | 49.3 tokens/s |
+| Generation Throughput (original Top-k) | 49.3 tokens/s |
+| Generation Throughput (UNK-filtered Top-k) | ~46.6 tokens/s |
 
 The model uses recursive interpolated smoothing with document-level BOS padding. Smoothing parameters were selected using the validation split.
 
 Training time measures n-gram counting on preprocessed data. Evaluation throughput measures CPU-based token scoring, while generation throughput includes full-vocabulary probability computation and top-k sampling.
+
+Text generation was evaluated using both standard Top-k sampling and UNK-filtered Top-k sampling. Filtering `<unk>` improved readability but did not eliminate grammatical errors or topic drift. Both decoding strategies use the same trained model, and the decoding changes do not affect the model's test perplexity.
+
+#### Vanilla RNN Baseline Results
+
+A single-layer Vanilla RNN with trainable embeddings was trained from scratch on WikiText-2 using PyTorch and the Apple Silicon MPS backend.
+
+| Metric | Result |
+|---|---:|
+| Trainable Parameters | 7,798,816 |
+| Best Epoch | 4 |
+| Validation Perplexity | 176.53 |
+| Test Perplexity | 169.98 |
+| Training and Validation Time | ~309.4 s |
+| Checkpoint Size | 29.75 MiB |
+| Evaluation Throughput | 90,159 tokens/s |
+| Generation Throughput (original Top-k) | 356.1 tokens/s |
+| Generation Throughput (UNK-filtered Top-k) | 354.6 tokens/s |
+
+The model uses 128-dimensional trainable embeddings, a 256-dimensional hidden state, and independent sequence windows of up to 64 tokens. The best checkpoint was selected using validation cross-entropy.
+
+UNK-filtered sampling improved the readability of generated text, although grammatical inconsistencies and topic drift remained. Decoding changes do not affect the model's test perplexity.
+
+Training time includes the measured four training epochs and validation passes, excluding preprocessing and initialization. Generation throughput was measured after an initial MPS warmup. Throughput comparisons with the CPU-based Trigram reflect different implementations and hardware backends.
 
 ### 2.2 Embedding Ablation
 
@@ -116,7 +141,11 @@ nlp-language-model-comparison/
 ├── scripts/
 │   ├── run_ngram.py
 │   ├── evaluate_ngram.py
-│   └── generate_ngram.py
+│   ├── generate_ngram.py
+│   ├── smoke_test_rnn.py
+│   ├── train_rnn.py
+│   ├── evaluate_rnn.py
+│   └── generate_rnn.py
 ├── src/
 │   ├── data/
 │   │   ├── prepare_data.py
@@ -125,13 +154,15 @@ nlp-language-model-comparison/
 │   │   ├── preprocess.py
 │   │   └── lm_dataset.py
 │   ├── models/
-│   │   └── ngram.py
+│   │   ├── ngram.py
+│   │   └── rnn.py
 │   ├── embeddings/
 │   ├── training/
 │   └── evaluation/
 └── tests/
     ├── test_lm_dataset.py
-    └── test_ngram.py
+    ├── test_ngram.py
+    └── test_rnn.py
 ```
 
 Some directories and experiment modules are reserved for later development.
@@ -197,6 +228,42 @@ python scripts/generate_ngram.py
 Model checkpoints are stored locally under `checkpoints/` and excluded from Git.
 
 **Note:** The current validation script only runs its configured candidate set, rather than automatically reproducing all stages of the original hyperparameter search.
+
+### Vanilla RNN Experiment Commands
+
+Run model correctness tests:
+
+```bash
+python tests/test_rnn.py
+```
+
+Run the small-scale training test:
+
+```bash
+python scripts/smoke_test_rnn.py
+```
+
+Train the RNN and select the best checkpoint using validation cross-entropy:
+
+```bash
+python scripts/train_rnn.py
+```
+
+Evaluate the saved checkpoint on the test set:
+
+```bash
+python scripts/evaluate_rnn.py
+```
+
+Generate text using the saved checkpoint:
+
+```bash
+python scripts/generate_rnn.py
+```
+
+Set `EXCLUDE_UNK = False` in `scripts/generate_rnn.py` for original Top-k sampling, or `EXCLUDE_UNK = True` for UNK-filtered Top-k sampling.
+
+Generated results are saved under `results/`. Model checkpoints are saved locally under `checkpoints/` and excluded from Git.
 
 ## 6. Current Progress
 

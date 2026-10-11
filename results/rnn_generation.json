@@ -1,0 +1,45 @@
+{
+  "model": "vanilla_rnn",
+  "checkpoint": "rnn_best.pt",
+  "best_epoch": 4,
+  "generation_config": {
+    "seed": 42,
+    "max_new_tokens": 40,
+    "temperature": 1.0,
+    "top_k": 20,
+    "exclude_unk": false
+  },
+  "samples": [
+    {
+      "prompt": "The history of",
+      "prompt_oov_tokens": [],
+      "generated_text": "The history of the <unk> , <unk> is an official <unk> , <unk> , <unk> , <unk> , <unk> , <unk> and <unk> <unk> <unk> . The collection of the <unk> was founded , which the remains of the largest . Because of",
+      "num_generated_tokens": 40,
+      "generation_seconds": 0.1418681669747457,
+      "tokens_per_second": 281.9519054413419,
+      "stopped_at_eos": false
+    },
+    {
+      "prompt": "In the city of",
+      "prompt_oov_tokens": [],
+      "generated_text": "In the city of <unk> , the <unk> <unk> , <unk> <unk> <unk> <unk> , <unk> <unk> ) and <unk> ( \" <unk> <unk> or \" <unk> \" \" \" <unk> \" ) , and , is the third of four <unk> , and",
+      "num_generated_tokens": 40,
+      "generation_seconds": 0.10096095799235627,
+      "tokens_per_second": 396.19275406467904,
+      "stopped_at_eos": false
+    },
+    {
+      "prompt": "The first",
+      "prompt_oov_tokens": [],
+      "generated_text": "The first two - known dinosaurs is a young factor , and the other gods . The main deck , has not been identified in the city ' s atmosphere , where , as <unk> , but can be found on the",
+      "num_generated_tokens": 40,
+      "generation_seconds": 0.09417679195757955,
+      "tokens_per_second": 424.7330915457108,
+      "stopped_at_eos": false
+    }
+  ],
+  "total_generated_tokens": 120,
+  "total_generation_seconds": 0.3370059169246815,
+  "overall_tokens_per_second": 356.0768341845439,
+  "device": "mps"
+}
