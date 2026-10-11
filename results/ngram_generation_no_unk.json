@@ -1,0 +1,47 @@
+{
+  "model": "interpolated_trigram",
+  "hyperparameters": {
+    "alpha": 10.0,
+    "tau2": 320.0,
+    "tau3": 320.0
+  },
+  "generation_config": {
+    "seed": 42,
+    "max_new_tokens": 40,
+    "temperature": 1.0,
+    "top_k": 20,
+    "exclude_unk": true
+  },
+  "samples": [
+    {
+      "prompt": "The history of",
+      "prompt_oov_tokens": [],
+      "generated_text": "The history of the season , the company had lost to the north , which was a very difficult to a hurricane . . I ' s music . The first to a hurricane as \" ) . It also be more common",
+      "num_generated_tokens": 40,
+      "generation_seconds": 0.8549669170170091,
+      "tokens_per_second": 46.78543602547866,
+      "stopped_at_eos": false
+    },
+    {
+      "prompt": "In the city of",
+      "prompt_oov_tokens": [],
+      "generated_text": "In the city of Galveston , and the other . The film received the most of the American Museum in the game ' s character was \" and was used for the rest of the American West , \" and his family , and",
+      "num_generated_tokens": 40,
+      "generation_seconds": 0.8905112909851596,
+      "tokens_per_second": 44.918015532120414,
+      "stopped_at_eos": false
+    },
+    {
+      "prompt": "The first",
+      "prompt_oov_tokens": [],
+      "generated_text": "The first game . \" As the song that it was the first half a dozen , the New Zealand that is a series . \" The following year . In August 2013 , a large German fleet , with a new",
+      "num_generated_tokens": 40,
+      "generation_seconds": 0.8322112089954317,
+      "tokens_per_second": 48.06472151256446,
+      "stopped_at_eos": false
+    }
+  ],
+  "total_generated_tokens": 120,
+  "total_generation_seconds": 2.5776894169976003,
+  "overall_tokens_per_second": 46.55331988745629
+}

@@ -25,14 +25,17 @@ SEED = 42
 MAX_NEW_TOKENS = 40
 TEMPERATURE = 1.0
 TOP_K = 20
+EXCLUDE_UNK = True
 
 
-def sample_next_token(model, context, rng):
-    """Sample a token using temperature and top-k filtering."""
+def sample_next_token(model, context, rng, unk_id=None):
     candidates = []
 
     for token_id in range(model.vocab_size):
         if token_id in model.excluded_targets:
+            continue
+
+        if unk_id is not None and token_id == unk_id:
             continue
 
         probability = model.probability(token_id, context)
@@ -68,10 +71,11 @@ def generate(model, prompt, vocab, id_to_token, rng):
 
     for _ in range(MAX_NEW_TOKENS):
         next_id = sample_next_token(
-            model,
-            history[-2:],
-            rng,
-        )
+        model,
+        history[-2:],
+        rng,
+        unk_id=vocab["<unk>"] if EXCLUDE_UNK else None,
+    )
 
         generated_ids.append(next_id)
         history.append(next_id)
@@ -184,6 +188,7 @@ def main():
             "max_new_tokens": MAX_NEW_TOKENS,
             "temperature": TEMPERATURE,
             "top_k": TOP_K,
+            "exclude_unk": EXCLUDE_UNK,
         },
         "samples": samples,
         "total_generated_tokens": total_tokens,
@@ -193,7 +198,13 @@ def main():
         ),
     }
 
-    output_path = ROOT / "results" / "ngram_generation.json"
+    output_filename = (
+        "ngram_generation_no_unk.json"
+        if EXCLUDE_UNK
+        else "ngram_generation.json"
+    )
+
+    output_path = ROOT / "results" / output_filename
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
     with output_path.open("w", encoding="utf-8") as file:
