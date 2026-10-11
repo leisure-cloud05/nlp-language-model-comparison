@@ -1,0 +1,45 @@
+{
+  "model": "causal_transformer",
+  "checkpoint": "transformer_best.pt",
+  "best_epoch": 4,
+  "generation_config": {
+    "seed": 42,
+    "max_new_tokens": 40,
+    "temperature": 1.0,
+    "top_k": 20,
+    "exclude_unk": true
+  },
+  "samples": [
+    {
+      "prompt": "The history of",
+      "prompt_oov_tokens": [],
+      "generated_text": "The history of the season was a member of an American science fiction team . The game is the first team and the final round in the NHL season . The Bulls also came into a top - time series in an appearance",
+      "num_generated_tokens": 40,
+      "generation_seconds": 0.22195937496144325,
+      "tokens_per_second": 180.21315840769705,
+      "stopped_at_eos": false
+    },
+    {
+      "prompt": "In the city of",
+      "prompt_oov_tokens": [],
+      "generated_text": "In the city of Pennsylvania , the Galveston Pacific Ocean , the first part of the Galveston . In an early 1900s , the town ' s main government to the city ' s population has an area in the Minnesota . The road",
+      "num_generated_tokens": 40,
+      "generation_seconds": 0.20217591704567894,
+      "tokens_per_second": 197.84750124794803,
+      "stopped_at_eos": false
+    },
+    {
+      "prompt": "The first",
+      "prompt_oov_tokens": [],
+      "generated_text": "The first two years after two weeks in February 2007 , the song is an official website team at number 11 at number 33 , 000 copies , and a ten and third single , and with two weeks of the album",
+      "num_generated_tokens": 40,
+      "generation_seconds": 0.18309145799139515,
+      "tokens_per_second": 218.47005009856824,
+      "stopped_at_eos": false
+    }
+  ],
+  "total_generated_tokens": 120,
+  "total_generation_seconds": 0.6072267499985173,
+  "overall_tokens_per_second": 197.61975242410352,
+  "device": "mps"
+}

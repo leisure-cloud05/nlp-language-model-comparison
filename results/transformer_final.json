@@ -1,0 +1,28 @@
+{
+  "model": "causal_transformer",
+  "best_epoch": 4,
+  "config": {
+    "embedding_dim": 128,
+    "num_heads": 4,
+    "num_layers": 2,
+    "feed_forward_dim": 512,
+    "max_seq_len": 64,
+    "dropout": 0.1,
+    "batch_size": 16,
+    "seq_len": 64,
+    "learning_rate": 0.001,
+    "epochs": 4,
+    "grad_clip": 1.0
+  },
+  "parameters": 5544992,
+  "test": {
+    "cross_entropy": 5.035639547074154,
+    "perplexity": 153.79792217643717,
+    "num_targets": 238352
+  },
+  "evaluation_seconds": 2.100772915990092,
+  "evaluation_tokens_per_second": 113459.19313114572,
+  "checkpoint_size_bytes": 22191693,
+  "checkpoint_size_mib": 21.163647651672363,
+  "device": "mps"
+}
