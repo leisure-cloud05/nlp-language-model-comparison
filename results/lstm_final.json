@@ -1,6 +1,6 @@
 {
   "model": "lstm",
-  "best_epoch": 4,
+  "best_epoch": 6,
   "config": {
     "embedding_dim": 128,
     "hidden_dim": 256,
@@ -8,18 +8,20 @@
     "batch_size": 16,
     "seq_len": 64,
     "learning_rate": 0.001,
-    "epochs": 4,
+    "epochs": 15,
+    "early_stopping_patience": 3,
+    "min_delta": 0.001,
     "grad_clip": 1.0
   },
   "parameters": 8095264,
   "test": {
-    "cross_entropy": 5.044767458758803,
-    "perplexity": 155.20820269346143,
+    "cross_entropy": 5.011658685866911,
+    "perplexity": 150.15358734220467,
     "num_targets": 238352
   },
-  "evaluation_seconds": 2.03175004204968,
-  "evaluation_tokens_per_second": 117313.64344382864,
-  "checkpoint_size_bytes": 32384747,
-  "checkpoint_size_mib": 30.884501457214355,
+  "evaluation_seconds": 1.9942615409963764,
+  "evaluation_tokens_per_second": 119518.92723203906,
+  "checkpoint_size_bytes": 32384863,
+  "checkpoint_size_mib": 30.88461208343506,
   "device": "mps"
 }

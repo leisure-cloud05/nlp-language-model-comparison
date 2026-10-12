@@ -1,7 +1,7 @@
 {
   "model": "vanilla_rnn",
   "checkpoint": "rnn_best.pt",
-  "best_epoch": 4,
+  "best_epoch": 5,
   "generation_config": {
     "seed": 42,
     "max_new_tokens": 40,
@@ -13,33 +13,33 @@
     {
       "prompt": "The history of",
       "prompt_oov_tokens": [],
-      "generated_text": "The history of the <unk> , <unk> is an official <unk> , <unk> , <unk> , <unk> , <unk> , <unk> and <unk> <unk> <unk> . The collection of the <unk> was founded , which the remains of the largest . Because of",
+      "generated_text": "The history of the <unk> is a series of five stars in the UK and the <unk> . <unk> of the song , he also has a unique friend and <unk> in <unk> ' s . You have been lucky from their original",
       "num_generated_tokens": 40,
-      "generation_seconds": 0.1418681669747457,
-      "tokens_per_second": 281.9519054413419,
+      "generation_seconds": 0.1525467499741353,
+      "tokens_per_second": 262.21469816159373,
       "stopped_at_eos": false
     },
     {
       "prompt": "In the city of",
       "prompt_oov_tokens": [],
-      "generated_text": "In the city of <unk> , the <unk> <unk> , <unk> <unk> <unk> <unk> , <unk> <unk> ) and <unk> ( \" <unk> <unk> or \" <unk> \" \" \" <unk> \" ) , and , is the third of four <unk> , and",
+      "generated_text": "In the city of Oldham , the United States Marine Corps was elected to the Royal Navy for a year . As a result to <unk> the end of the war , the <unk> of Croatia declared the new manager at the end of",
       "num_generated_tokens": 40,
-      "generation_seconds": 0.10096095799235627,
-      "tokens_per_second": 396.19275406467904,
+      "generation_seconds": 0.09894374996656552,
+      "tokens_per_second": 404.2701030991504,
       "stopped_at_eos": false
     },
     {
       "prompt": "The first",
       "prompt_oov_tokens": [],
-      "generated_text": "The first two - known dinosaurs is a young factor , and the other gods . The main deck , has not been identified in the city ' s atmosphere , where , as <unk> , but can be found on the",
+      "generated_text": "The first was released in 2004 , the most popular series of the song in the episode \" ' s Child in the early 20th century . <unk> <unk> of The Wall ' s <unk> <unk> in his review . In the",
       "num_generated_tokens": 40,
-      "generation_seconds": 0.09417679195757955,
-      "tokens_per_second": 424.7330915457108,
+      "generation_seconds": 0.09398974996292964,
+      "tokens_per_second": 425.57832120817795,
       "stopped_at_eos": false
     }
   ],
   "total_generated_tokens": 120,
-  "total_generation_seconds": 0.3370059169246815,
-  "overall_tokens_per_second": 356.0768341845439,
+  "total_generation_seconds": 0.34548024990363047,
+  "overall_tokens_per_second": 347.34257611968627,
   "device": "mps"
 }

@@ -35,7 +35,9 @@ CONFIG = {
     "batch_size": 16,
     "seq_len": 64,
     "learning_rate": 0.001,
-    "epochs": 4,
+    "epochs": 15,
+    "early_stopping_patience": 3,
+    "min_delta": 0.001,
     "grad_clip": 1.0,
 }
 
@@ -172,6 +174,8 @@ def main():
 
     history = []
     best_val_ce = float("inf")
+    best_epoch = None
+    epochs_without_improvement = 0
 
     for epoch in range(1, CONFIG["epochs"] + 1):
         print(
@@ -226,8 +230,13 @@ def main():
             flush=True,
         )
 
+        
+        # Save the checkpoint with the lowest validation CE.
+        previous_best_ce = best_val_ce
+
         if val_ce < best_val_ce:
             best_val_ce = val_ce
+            best_epoch = epoch
 
             torch.save(
                 {
@@ -236,17 +245,28 @@ def main():
                     "vocab_size": len(vocab),
                     "pad_id": vocab["<pad>"],
                     "seed": SEED,
-                    "best_epoch": epoch,
+                    "best_epoch": best_epoch,
                     "best_val_ce": best_val_ce,
                 },
                 best_path,
             )
 
+            print("Best checkpoint updated.", flush=True)
+
+        # Apply the same early stopping rule as RNN and LSTM.
+        if val_ce < previous_best_ce - CONFIG["min_delta"]:
+            epochs_without_improvement = 0
+        else:
+            epochs_without_improvement += 1
+
             print(
-                "Best checkpoint updated.",
+                "No significant validation improvement: "
+                f"{epochs_without_improvement}/"
+                f"{CONFIG['early_stopping_patience']}",
                 flush=True,
             )
 
+        # Save the history of every completed epoch.
         with history_path.open("w", encoding="utf-8") as file:
             json.dump(
                 {
@@ -256,14 +276,31 @@ def main():
                     "config": CONFIG,
                     "parameters": model.num_parameters(),
                     "history": history,
+                    "best_epoch": best_epoch,
                     "best_val_ce": best_val_ce,
+                    "epochs_without_improvement": (
+                        epochs_without_improvement
+                    ),
                 },
                 file,
                 indent=2,
             )
 
+        if (
+            epochs_without_improvement
+            >= CONFIG["early_stopping_patience"]
+        ):
+            print(
+                f"Early stopping triggered at epoch {epoch}.",
+                flush=True,
+            )
+            break
+
     print("\nTraining completed.")
+    print(f"Epochs completed: {len(history)}")
+    print(f"Best epoch: {best_epoch}")
     print(f"Best validation CE: {best_val_ce:.4f}")
+    print(f"Best validation PPL: {math.exp(best_val_ce):.2f}")
     print(f"Checkpoint: {best_path}")
     print(f"Training history: {history_path}")
 

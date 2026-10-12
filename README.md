@@ -5,7 +5,7 @@ A reproducible NLP project comparing language modeling architectures, word embed
 **Topic:** Natural Language Processing for Data Science  
 **Framework:** PyTorch  
 **Dataset:** WikiText-2 (raw)  
-**Status:** Data preprocessing and dataset validation completed; model experiments in progress.
+**Status:** Part I language model benchmarking completed; embedding ablation and downstream representation analysis in progress.
 
 ## 1. Project Overview
 
@@ -36,15 +36,17 @@ Evaluation will cover next-token cross-entropy or perplexity, training and infer
 
 The interpolated Trigram language model has been implemented and evaluated on WikiText-2.
 
-| Metric | Result |
-|---|---:|
-| Validation Perplexity | 264.90 |
-| Test Perplexity | 258.38 |
-| Training Time | 1.61 s |
-| Serialized Model Size | 24.01 MiB |
-| Evaluation Throughput | 934,666 tokens/s |
-| Generation Throughput (original Top-k) | 49.3 tokens/s |
-| Generation Throughput (UNK-filtered Top-k) | ~46.6 tokens/s |
+
+| Metric                                     | Result           |
+| ------------------------------------------ | ---------------- |
+| Validation Perplexity                      | 264.90           |
+| Test Perplexity                            | 258.38           |
+| Training Time                              | 1.61 s           |
+| Serialized Model Size                      | 24.01 MiB        |
+| Evaluation Throughput                      | 934,666 tokens/s |
+| Generation Throughput (original Top-k)     | 49.3 tokens/s    |
+| Generation Throughput (UNK-filtered Top-k) | ~46.6 tokens/s   |
+
 
 The model uses recursive interpolated smoothing with document-level BOS padding. Smoothing parameters were selected using the validation split.
 
@@ -56,48 +58,82 @@ Text generation was evaluated using both standard Top-k sampling and UNK-filtere
 
 A single-layer Vanilla RNN with trainable embeddings was trained from scratch on WikiText-2 using PyTorch and the Apple Silicon MPS backend.
 
-| Metric | Result |
-|---|---:|
-| Trainable Parameters | 7,798,816 |
-| Best Epoch | 4 |
-| Validation Perplexity | 176.53 |
-| Test Perplexity | 169.98 |
-| Training and Validation Time | ~309.4 s |
-| Checkpoint Size | 29.75 MiB |
-| Evaluation Throughput | 90,159 tokens/s |
-| Generation Throughput (original Top-k) | 356.1 tokens/s |
-| Generation Throughput (UNK-filtered Top-k) | 354.6 tokens/s |
 
-The model uses 128-dimensional trainable embeddings, a 256-dimensional hidden state, and independent sequence windows of up to 64 tokens. The best checkpoint was selected using validation cross-entropy.
+| Metric                                     | Result                       |
+| ------------------------------------------ | ---------------------------- |
+| Trainable Parameters                       | 7,798,816                    |
+| Best Epoch                                 | 5 (early stopped at epoch 8) |
+| Validation Perplexity                      | 175.77                       |
+| Test Cross-Entropy                         | 5.1323                       |
+| Test Perplexity                            | 169.41                       |
+| Training and Validation Time               | 633.1 s                      |
+| Checkpoint Size                            | 29.75 MiB                    |
+| Evaluation Throughput                      | 99,931 tokens/s              |
+| Generation Throughput (original Top-k)     | 347.3 tokens/s               |
+| Generation Throughput (UNK-filtered Top-k) | 365.8 tokens/s               |
 
-UNK-filtered sampling improved the readability of generated text, although grammatical inconsistencies and topic drift remained. Decoding changes do not affect the model's test perplexity.
 
-Training time includes the measured four training epochs and validation passes, excluding preprocessing and initialization. Generation throughput was measured after an initial MPS warmup. Throughput comparisons with the CPU-based Trigram reflect different implementations and hardware backends.
+The model uses 128-dimensional trainable embeddings, a 256-dimensional hidden state, and independent sequence windows of up to 64 tokens. The best checkpoint was selected using validation cross-entropy. The model was trained with a maximum of 15 epochs and early stopping (patience 3, minimum improvement 0.001 in validation cross-entropy).
+
+Validation performance peaked at epoch 5 and deteriorated thereafter even as training loss continued to decrease, consistent with overfitting. UNK-filtered sampling improved the readability of generated text, although grammatical inconsistencies and topic drift remained. Decoding changes do not affect the model's test perplexity.
+
+Training time includes eight measured training epochs and validation passes, excluding preprocessing and initialization. Generation throughput was measured after an initial MPS warmup. Throughput comparisons with the CPU-based Trigram reflect different implementations and hardware backends.
 
 #### LSTM Baseline Results
 
-A single-layer LSTM with trainable embeddings was trained on WikiText-2 using PyTorch and the Apple Silicon MPS backend, following the same preprocessing and training configuration as the Vanilla RNN.
+A single-layer LSTM with trainable embeddings was trained on WikiText-2 using PyTorch and the Apple Silicon MPS backend, following the same preprocessing and core optimization settings as the Vanilla RNN.
 
-| Metric | Result |
-|---|---:|
-| Trainable Parameters | 8,095,264 |
-| Best Epoch | 4 |
-| Validation Perplexity | 161.03 |
-| Test Cross-Entropy | 5.0448 |
-| Test Perplexity | 155.21 |
-| Training and Validation Time | ~292.4 s |
-| Checkpoint Size | 30.88 MiB |
-| Evaluation Throughput | 117,314 tokens/s |
-| Generation Throughput (original Top-k) | 440.9 tokens/s |
-| Generation Throughput (UNK-filtered Top-k) | 430.9 tokens/s |
 
-The model uses 128-dimensional trainable embeddings, a 256-dimensional hidden state, and independent sequence windows of up to 64 tokens. The best checkpoint was selected using validation cross-entropy.
+| Metric                                     | Result                       |
+| ------------------------------------------ | ---------------------------- |
+| Trainable Parameters                       | 8,095,264                    |
+| Best Epoch                                 | 6 (early stopped at epoch 9) |
+| Validation Perplexity                      | 155.64                       |
+| Test Cross-Entropy                         | 5.0117                       |
+| Test Perplexity                            | 150.15                       |
+| Training and Validation Time               | 690.0 s                      |
+| Checkpoint Size                            | 30.88 MiB                    |
+| Evaluation Throughput                      | 119,519 tokens/s             |
+| Generation Throughput (original Top-k)     | 439.6 tokens/s               |
+| Generation Throughput (UNK-filtered Top-k) | 440.9 tokens/s               |
 
-The LSTM achieved lower test perplexity than the Vanilla RNN (155.21 vs. 169.98), although it used more trainable parameters.
 
-Text generation was evaluated using the same three prompts and Top-k sampling settings as the RNN. UNK-filtered sampling improved readability, but the generated text still showed repetition and semantic inconsistencies.
+The model uses 128-dimensional trainable embeddings, a 256-dimensional hidden state, and independent sequence windows of up to 64 tokens. The best checkpoint was selected using validation cross-entropy. Training used a maximum of 15 epochs with early stopping (patience 3, minimum improvement 0.001 in validation cross-entropy).
 
-Training time includes four training epochs and validation passes. Generation throughput was measured after MPS warmup. Reported efficiency measurements are specific to the current hardware and implementation.
+The LSTM achieved lower test perplexity than the Vanilla RNN (150.15 vs. 169.41), although it used more trainable parameters. Validation performance was best at epoch 6 and worsened during the following three epochs.
+
+Text generation used the same three prompts and Top-k sampling settings as the RNN. UNK-filtered sampling improved readability, but generated text still showed repetition and semantic inconsistencies.
+
+Training time includes nine measured training epochs and validation passes, excluding preprocessing and initialization. Generation throughput was measured after MPS warmup. Reported efficiency measurements are specific to the current hardware and implementation.
+
+#### Causal Transformer Baseline Results
+
+A two-layer causal Transformer language model was implemented with manually constructed multi-head self-attention, causal masking, residual connections, and feed-forward blocks. Training and evaluation were performed on WikiText-2 using PyTorch and the Apple Silicon MPS backend.
+
+
+| Metric                                     | Result                               |
+| ------------------------------------------ | ------------------------------------ |
+| Trainable Parameters                       | 5,544,992                            |
+| Best Epoch                                 | 15 (maximum training budget reached) |
+| Validation Perplexity                      | 138.37                               |
+| Test Cross-Entropy                         | 4.8994                               |
+| Test Perplexity                            | 134.21                               |
+| Training and Validation Time               | 798.9 s                              |
+| Checkpoint Size                            | 21.16 MiB                            |
+| Evaluation Throughput                      | 153,416 tokens/s                     |
+| Generation Throughput (original Top-k)     | 203.3 tokens/s                       |
+| Generation Throughput (UNK-filtered Top-k) | 202.8 tokens/s                       |
+
+
+The Transformer uses 128-dimensional token and learned positional embeddings, two Transformer blocks, four attention heads, a feed-forward dimension of 512, and dropout of 0.1. Independent sequence windows of up to 64 tokens were used. The best checkpoint was selected using validation cross-entropy, under a maximum budget of 15 epochs and early stopping (patience 3, minimum improvement 0.001 in validation cross-entropy).
+
+Causal multi-head self-attention was implemented directly using PyTorch tensor operations, without relying on `nn.MultiheadAttention` or `nn.TransformerEncoder`. Correctness tests verified forward and backward computation, causal next-token behavior, and masking of future positions.
+
+The Transformer achieved the lowest test perplexity among the four evaluated models (134.21), below the LSTM (150.15), while using fewer trainable parameters. Validation cross-entropy was lowest at epoch 15, so convergence beyond the maximum training budget has not been established. These findings are specific to the tested configurations and do not establish general architectural superiority.
+
+Text generation used the same three prompts, top-k value (20), temperature (1.0), random seed (42), and maximum generation length (40 tokens) as the recurrent models. UNK-filtered sampling improved readability, although repetition, grammatical errors, and semantic inconsistencies remained.
+
+Training time includes the measured 15 training epochs and validation passes, excluding preprocessing and initialization. Generation throughput includes repeated context inference and top-k sampling without KV caching.
 
 #### From-Scratch Recurrent Model Implementations
 
@@ -131,6 +167,27 @@ The main LSTM benchmark uses PyTorch's optimized `nn.LSTM` for training and effi
 - `tests/test_lstm_from_scratch.py`
 
 The manual implementations are separate from the benchmark models and do not change the reported training or evaluation results.
+
+#### Language Model Comparison Summary
+
+All four models were evaluated using the same processed WikiText-2 splits, 20,000-word vocabulary, and valid next-token targets.
+
+
+| Model                | Validation PPL | Test PPL   | Test CE    | Model Size    |
+| -------------------- | -------------- | ---------- | ---------- | ------------- |
+| Interpolated Trigram | 264.90         | 258.38     | 5.5544     | 24.01 MiB     |
+| Vanilla RNN          | 175.77         | 169.41     | 5.1323     | 29.75 MiB     |
+| LSTM                 | 155.64         | 150.15     | 5.0117     | 30.88 MiB     |
+| Causal Transformer   | **138.37**     | **134.21** | **4.8994** | **21.16 MiB** |
+
+
+**Extended training and checkpoint selection.** The three neural models were trained from scratch using Adam (learning rate 0.001), batch size 16, gradient clipping at 1.0, and random seed 42, with a maximum of 15 epochs. Early stopping used patience 3 and minimum improvement 0.001 in validation cross-entropy. The checkpoint with the lowest observed validation cross-entropy was retained for test evaluation, even when an improvement was smaller than the early-stopping threshold.
+
+The Vanilla RNN stopped after epoch 8 (best epoch 5); the LSTM stopped after epoch 9 (best epoch 6); and the Transformer ran all 15 epochs (best epoch 15). The Transformer's validation performance was still improving at the training-budget limit, so convergence is not established. Measured training plus validation times were 633.1 s, 690.0 s, and 798.9 s, respectively; these exclude preprocessing and initialization.
+
+Neural language models achieved substantially lower test perplexity than the Trigram baseline. The LSTM outperformed the Vanilla RNN, and the Transformer achieved the lowest perplexity. Longer training substantially improved Transformer test perplexity, but qualitative samples from all three neural models still showed repetition, grammatical inconsistencies, and topic drift. UNK-filtered decoding improved readability without changing test perplexity.
+
+These comparisons control the dataset, vocabulary, target coverage, and core evaluation procedure. Model parameter counts, architectures, context mechanisms, effective training durations, and implementation backends differ; the results represent comparisons of the evaluated systems, not strictly parameter-matched architectural ablations. Generation observations are based on three fixed prompts and are not a definitive quality ranking.
 
 ### 2.2 Embedding Ablation
 
@@ -207,7 +264,11 @@ nlp-language-model-comparison/
 │   ├── smoke_test_lstm.py
 │   ├── train_lstm.py
 │   ├── evaluate_lstm.py
-│   └── generate_lstm.py
+│   ├── generate_lstm.py
+│   ├── smoke_test_transformer.py
+│   ├── train_transformer.py
+│   ├── evaluate_transformer.py
+│   └── generate_transformer.py
 ├── src/
 │   ├── data/
 │   │   ├── prepare_data.py
@@ -220,7 +281,8 @@ nlp-language-model-comparison/
 │   │   ├── rnn.py
 │   │   ├── rnn_from_scratch.py
 │   │   ├── lstm.py
-│   │   └── lstm_from_scratch.py
+│   │   ├── lstm_from_scratch.py
+│   │   └── transformer.py
 │   ├── embeddings/
 │   ├── training/
 │   └── evaluation/
@@ -230,7 +292,8 @@ nlp-language-model-comparison/
     ├── test_rnn.py
     ├── test_rnn_from_scratch.py
     ├── test_lstm.py
-    └── test_lstm_from_scratch.py
+    ├── test_lstm_from_scratch.py
+    └── test_transformer.py
 ```
 
 Some directories and experiment modules are reserved for later development.
@@ -380,6 +443,44 @@ python tests/test_lstm_from_scratch.py
 
 These tests compare forward outputs, recurrent states, and backward gradients without retraining the benchmark models.
 
+### Causal Transformer Experiment Commands
+
+Run model correctness tests, including causal masking and gradient verification:
+
+```bash
+python tests/test_transformer.py
+```
+
+Run the small-scale MPS training test:
+
+```bash
+python scripts/smoke_test_transformer.py
+```
+
+Train the Transformer and select the best checkpoint using validation cross-entropy:
+
+```bash
+python scripts/train_transformer.py
+```
+
+Evaluate the saved best checkpoint on the test split:
+
+```bash
+python scripts/evaluate_transformer.py
+```
+
+Generate text using the saved checkpoint:
+
+```bash
+python scripts/generate_transformer.py
+```
+
+Set `EXCLUDE_UNK = False` in `scripts/generate_transformer.py` for original Top-k sampling, or `EXCLUDE_UNK = True` for UNK-filtered Top-k sampling.
+
+Generation results are saved separately under `results/`. The best model checkpoint is stored locally under `checkpoints/` and excluded from Git.
+
+The Transformer implements causal multi-head self-attention manually using PyTorch tensor operations. The generation procedure recomputes the most recent context without KV caching.
+
 ## 6. Current Progress
 
 - [x] Initialize GitHub repository
@@ -393,7 +494,7 @@ These tests compare forward outputs, recurrent states, and backward gradients wi
 - [x] Train and evaluate n-gram model
 - [x] Train and evaluate RNN
 - [x] Train and evaluate LSTM
-- [ ] Train and evaluate causal Transformer
+- [x] Train and evaluate causal Transformer
 - [ ] Complete embedding ablation experiments
 - [ ] Evaluate downstream representations
 - [ ] Finalize reproducibility documentation and report
@@ -404,7 +505,7 @@ These tests compare forward outputs, recurrent states, and backward gradients wi
 
 The vocabulary is built only from the training split, and document boundaries are preserved in next-token sample construction.
 
-The current dataset implementation treats fixed windows independently. Recurrent model states will not automatically carry across windows. Model-specific context limitations and evaluation procedures will be documented before final comparisons.
+The dataset treats fixed windows independently: recurrent hidden states are reset for each window, and the Transformer uses causal attention over at most 64 input tokens. This short word-level context and the fixed 20,000-word vocabulary constrain generation quality.
 
 The preprocessing pipeline discards heading text and uses document-level beginning and end markers. This is a deliberate simplification and may affect language modeling results.
 

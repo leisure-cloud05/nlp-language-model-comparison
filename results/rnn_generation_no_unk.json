@@ -1,7 +1,7 @@
 {
   "model": "vanilla_rnn",
   "checkpoint": "rnn_best.pt",
-  "best_epoch": 4,
+  "best_epoch": 5,
   "generation_config": {
     "seed": 42,
     "max_new_tokens": 40,
@@ -13,33 +13,33 @@
     {
       "prompt": "The history of",
       "prompt_oov_tokens": [],
-      "generated_text": "The history of the United States and New Jersey of the Year , the westernmost part of the Great Western Australia in the first year of the 2008 season . The second game ' s final tour , and peaked at the same",
+      "generated_text": "The history of the United States was elected by William Cramp and Sons of the United States and Europe . In a review to avoid the stage scenes of the poem for a short stories in concert with a prostitute in The Good",
       "num_generated_tokens": 40,
-      "generation_seconds": 0.1446043749456294,
-      "tokens_per_second": 276.6168037103983,
+      "generation_seconds": 0.13737679098267108,
+      "tokens_per_second": 291.1699983226836,
       "stopped_at_eos": false
     },
     {
       "prompt": "In the city of",
       "prompt_oov_tokens": [],
-      "generated_text": "In the city of a star , the fungus is a type of the core , and to a large number of the main routes in the early 1800s of the war . The Song had become the use of Canterbury and the rest",
+      "generated_text": "In the city of St . Clair , the Sidonian king ' s family , and the use of a woman from the first floor in the United States ' s Gate Roundabout , the United Kingdom of Jerusalem . She also named the",
       "num_generated_tokens": 40,
-      "generation_seconds": 0.09900991700123996,
-      "tokens_per_second": 403.99993466815107,
+      "generation_seconds": 0.09865641599753872,
+      "tokens_per_second": 405.4475281262794,
       "stopped_at_eos": false
     },
     {
       "prompt": "The first",
       "prompt_oov_tokens": [],
-      "generated_text": "The first published in a short story , said it was \" a lot that of the lyrics will do what will be more useful in the sense of the series or it . \" The Jackson said \" \" is a",
+      "generated_text": "The first two - point in the game are \" a \" nonsense \" ( i . e ? \" and that \" this sort of the show , which he wrote his book and the effect for the family ' s",
       "num_generated_tokens": 40,
-      "generation_seconds": 0.09478429198497906,
-      "tokens_per_second": 422.0108539328331,
+      "generation_seconds": 0.09203487500781193,
+      "tokens_per_second": 434.6178554227927,
       "stopped_at_eos": false
     }
   ],
   "total_generated_tokens": 120,
-  "total_generation_seconds": 0.3383985839318484,
-  "overall_tokens_per_second": 354.6114129844212,
+  "total_generation_seconds": 0.32806808198802173,
+  "overall_tokens_per_second": 365.77773513603006,
   "device": "mps"
 }

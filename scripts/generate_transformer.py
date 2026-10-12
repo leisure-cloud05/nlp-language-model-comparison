@@ -28,7 +28,7 @@ TEMPERATURE = 1.0
 TOP_K = 20
 
 # False: original sampling; True: exclude <unk> from sampling.
-EXCLUDE_UNK = False
+EXCLUDE_UNK = True
 
 
 def synchronize(device):

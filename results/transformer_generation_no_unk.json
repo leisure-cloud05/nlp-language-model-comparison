@@ -1,7 +1,7 @@
 {
   "model": "causal_transformer",
   "checkpoint": "transformer_best.pt",
-  "best_epoch": 4,
+  "best_epoch": 15,
   "generation_config": {
     "seed": 42,
     "max_new_tokens": 40,
@@ -13,33 +13,33 @@
     {
       "prompt": "The history of",
       "prompt_oov_tokens": [],
-      "generated_text": "The history of the season was a member of an American science fiction team . The game is the first team and the final round in the NHL season . The Bulls also came into a top - time series in an appearance",
+      "generated_text": "The history of the American Red Sox and Lost World War I . Sisler , was a former professional baseball pitcher to the National Science Baseball Hall Dodgers in the United States in 2005 , where a professional team player . On the",
       "num_generated_tokens": 40,
-      "generation_seconds": 0.22195937496144325,
-      "tokens_per_second": 180.21315840769705,
+      "generation_seconds": 0.21250995801528916,
+      "tokens_per_second": 188.226473590109,
       "stopped_at_eos": false
     },
     {
       "prompt": "In the city of",
       "prompt_oov_tokens": [],
-      "generated_text": "In the city of Pennsylvania , the Galveston Pacific Ocean , the first part of the Galveston . In an early 1900s , the town ' s main government to the city ' s population has an area in the Minnesota . The road",
+      "generated_text": "In the city of Omaha , the city was a city of Houston and a National Scenic Byway in Lycoming County and the National League , in a village of Newark . The highway serves for traffic from highway to Port - au -",
       "num_generated_tokens": 40,
-      "generation_seconds": 0.20217591704567894,
-      "tokens_per_second": 197.84750124794803,
+      "generation_seconds": 0.2029933329904452,
+      "tokens_per_second": 197.0508065990659,
       "stopped_at_eos": false
     },
     {
       "prompt": "The first",
       "prompt_oov_tokens": [],
-      "generated_text": "The first two years after two weeks in February 2007 , the song is an official website team at number 11 at number 33 , 000 copies , and a ten and third single , and with two weeks of the album",
+      "generated_text": "The first two - action proposal of the Lords : the Lords was an amendment of the Lords — and were an English , a minority constitution by the Lords , were taken codified in the 13th and 12th - century .",
       "num_generated_tokens": 40,
-      "generation_seconds": 0.18309145799139515,
-      "tokens_per_second": 218.47005009856824,
+      "generation_seconds": 0.17615412501618266,
+      "tokens_per_second": 227.07387633599464,
       "stopped_at_eos": false
     }
   ],
   "total_generated_tokens": 120,
-  "total_generation_seconds": 0.6072267499985173,
-  "overall_tokens_per_second": 197.61975242410352,
+  "total_generation_seconds": 0.591657416021917,
+  "overall_tokens_per_second": 202.82007247848776,
   "device": "mps"
 }

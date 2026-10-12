@@ -1,7 +1,7 @@
 {
   "model": "causal_transformer",
   "checkpoint": "transformer_best.pt",
-  "best_epoch": 4,
+  "best_epoch": 15,
   "generation_config": {
     "seed": 42,
     "max_new_tokens": 40,
@@ -13,33 +13,33 @@
     {
       "prompt": "The history of",
       "prompt_oov_tokens": [],
-      "generated_text": "The history of <unk> ( <unk> ) , which consists of the <unk> ( <unk> ) is the largest <unk> <unk> . The name is a <unk> graph , and the only type is also used into the genus Lactarius <unk> - shaped",
+      "generated_text": "The history of the <unk> <unk> ( English – 1822 ) is a <unk> by the <unk> and the <unk> . Mkhedruli ligature was known as the English language language by English scholar , as of one of the Veerashaiva poet Maya <unk>",
       "num_generated_tokens": 40,
-      "generation_seconds": 0.20798466599080712,
-      "tokens_per_second": 192.32187050639587,
+      "generation_seconds": 0.21873620798578486,
+      "tokens_per_second": 182.86867258208804,
       "stopped_at_eos": false
     },
     {
       "prompt": "In the city of",
       "prompt_oov_tokens": [],
-      "generated_text": "In the city of Historic Places , the <unk> , the city is a part of the North Korea . The route is a modern route between the west . The city was located in south Florida and has a center of the <unk>",
+      "generated_text": "In the city of Toronto , the city was a city of Galveston . It was a national centre on the town of Galveston city , a park centre . The Galveston is a Grade with Galveston . It is in a Galveston home",
       "num_generated_tokens": 40,
-      "generation_seconds": 0.19590529199922457,
-      "tokens_per_second": 204.18029340503128,
+      "generation_seconds": 0.19036620802944526,
+      "tokens_per_second": 210.12132570194876,
       "stopped_at_eos": false
     },
     {
       "prompt": "The first",
       "prompt_oov_tokens": [],
-      "generated_text": "The first two years after World War II – 1 : <unk> <unk> ; The <unk> – <unk> was an exhibition was a British Empire and the city of Ireland . His predecessor was also known to use the building as a",
+      "generated_text": "The first observation of the kakapo is a Canadian artist , and the <unk> is a <unk> <unk> woman who resemble an <unk> woman in a <unk> of the Māori , though is the most common plumage to the female <unk> .",
       "num_generated_tokens": 40,
-      "generation_seconds": 0.19796762499026954,
-      "tokens_per_second": 202.05323977577683,
+      "generation_seconds": 0.1810976670240052,
+      "tokens_per_second": 220.87529153369957,
       "stopped_at_eos": false
     }
   ],
   "total_generated_tokens": 120,
-  "total_generation_seconds": 0.6018575829803012,
-  "overall_tokens_per_second": 199.38271676461972,
+  "total_generation_seconds": 0.5902000830392353,
+  "overall_tokens_per_second": 203.32087956013154,
   "device": "mps"
 }

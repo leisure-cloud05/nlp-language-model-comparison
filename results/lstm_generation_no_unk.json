@@ -1,7 +1,7 @@
 {
   "model": "lstm",
   "checkpoint": "lstm_best.pt",
-  "best_epoch": 4,
+  "best_epoch": 6,
   "generation_config": {
     "seed": 42,
     "max_new_tokens": 40,
@@ -13,33 +13,33 @@
     {
       "prompt": "The history of",
       "prompt_oov_tokens": [],
-      "generated_text": "The history of the city is a number of times , with the city ' s population in the area , in which is located in the centre of the city in which was used as by the king . It also used",
+      "generated_text": "The history of the city is a mixture of its own genus , and is a common bird that is not well known , the only exception and the other hand will have to become the base of the site is an increase",
       "num_generated_tokens": 40,
-      "generation_seconds": 0.1702927919686772,
-      "tokens_per_second": 234.88956600909685,
+      "generation_seconds": 0.16420362499775365,
+      "tokens_per_second": 243.59998142883393,
       "stopped_at_eos": false
     },
     {
       "prompt": "In the city of",
       "prompt_oov_tokens": [],
-      "generated_text": "In the city of Mexico , the Missouri River was a member of the town of the village , the storm damaged the area near the town , in Mexico . The depression moved into Mexico from the town of Ireland . The highway",
+      "generated_text": "In the city of Croatia , the \" The Sixth Extinction \" was the first time in that it was a number of the largest structure in the 19th century . The song was released with three other albums . \" Crazy in Love",
       "num_generated_tokens": 40,
-      "generation_seconds": 0.05516179197002202,
-      "tokens_per_second": 725.1396042706194,
+      "generation_seconds": 0.05543091701110825,
+      "tokens_per_second": 721.6189476350189,
       "stopped_at_eos": false
     },
     {
       "prompt": "The first",
       "prompt_oov_tokens": [],
-      "generated_text": "The first game was in \" Promiscuous \" a single - based on - home dad . \" Crazy in his opinion , it \" a lot of the same , one or more than a way ? \" He has been",
+      "generated_text": "The first place of the New York Times became the first time in the mid - 1990s , Jordan began writing an annual record for $ 10 million . In November 1953 he was released on 15 October 2013 , after the",
       "num_generated_tokens": 40,
-      "generation_seconds": 0.053062791004776955,
-      "tokens_per_second": 753.8238988672688,
+      "generation_seconds": 0.052505416970234364,
+      "tokens_per_second": 761.8261563883254,
       "stopped_at_eos": false
     }
   ],
   "total_generated_tokens": 120,
-  "total_generation_seconds": 0.27851737494347617,
-  "overall_tokens_per_second": 430.85283287749445,
+  "total_generation_seconds": 0.27213995897909626,
+  "overall_tokens_per_second": 440.9495777472998,
   "device": "mps"
 }

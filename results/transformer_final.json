@@ -1,6 +1,6 @@
 {
   "model": "causal_transformer",
-  "best_epoch": 4,
+  "best_epoch": 15,
   "config": {
     "embedding_dim": 128,
     "num_heads": 4,
@@ -11,18 +11,20 @@
     "batch_size": 16,
     "seq_len": 64,
     "learning_rate": 0.001,
-    "epochs": 4,
+    "epochs": 15,
+    "early_stopping_patience": 3,
+    "min_delta": 0.001,
     "grad_clip": 1.0
   },
   "parameters": 5544992,
   "test": {
-    "cross_entropy": 5.035639547074154,
-    "perplexity": 153.79792217643717,
+    "cross_entropy": 4.899431343229695,
+    "perplexity": 134.2134366010979,
     "num_targets": 238352
   },
-  "evaluation_seconds": 2.100772915990092,
-  "evaluation_tokens_per_second": 113459.19313114572,
-  "checkpoint_size_bytes": 22191693,
-  "checkpoint_size_mib": 21.163647651672363,
+  "evaluation_seconds": 1.5536271670134738,
+  "evaluation_tokens_per_second": 153416.47279390867,
+  "checkpoint_size_bytes": 22191901,
+  "checkpoint_size_mib": 21.163846015930176,
   "device": "mps"
 }
