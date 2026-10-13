@@ -1,4 +1,3 @@
-
 """Train Skip-gram word embeddings on the existing WikiText-2 corpus."""
 
 from gensim.models import Word2Vec
