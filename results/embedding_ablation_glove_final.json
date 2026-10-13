@@ -1,0 +1,37 @@
+{
+  "model": "embedding_ablation_lstm",
+  "embedding_strategy": "glove",
+  "freeze_embeddings": true,
+  "dataset": "wikitext-2-raw-v1",
+  "split": "test",
+  "device": "mps",
+  "seed": 42,
+  "config": {
+    "embedding_dim": 100,
+    "hidden_dim": 256,
+    "num_layers": 1,
+    "batch_size": 16,
+    "seq_len": 64,
+    "learning_rate": 0.001,
+    "epochs": 15,
+    "early_stopping_patience": 3,
+    "min_delta": 0.001,
+    "grad_clip": 1.0
+  },
+  "best_epoch": 8,
+  "best_val_ce": 4.949140091783861,
+  "embedding_coverage": {
+    "ordinary_vocabulary_size": 19996,
+    "exact_matches": 12954,
+    "lowercase_matches": 6784,
+    "missing": 258,
+    "coverage": 0.9870974194838967
+  },
+  "trainable_parameters": 5506592,
+  "test_ce": 4.922431252871279,
+  "test_ppl": 137.3361064220717,
+  "test_targets": 238352,
+  "evaluation_seconds": 1.9582503749988973,
+  "evaluation_tokens_per_second": 121716.81570602748,
+  "checkpoint": "checkpoints/embedding_ablation_glove_best.pt"
+}

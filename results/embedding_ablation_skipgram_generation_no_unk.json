@@ -1,0 +1,46 @@
+{
+  "model": "embedding_ablation_lstm",
+  "embedding_strategy": "skipgram",
+  "checkpoint": "embedding_ablation_skipgram_best.pt",
+  "best_epoch": 8,
+  "generation_config": {
+    "seed": 42,
+    "max_new_tokens": 40,
+    "temperature": 1.0,
+    "top_k": 20,
+    "exclude_unk": true
+  },
+  "samples": [
+    {
+      "prompt": "The history of",
+      "prompt_oov_tokens": [],
+      "generated_text": "The history of the first time , was later recognised in the late 1960s , and the 1960s was a focal by the new design , and at the time of an original roof with a bridge that is known as it .",
+      "num_generated_tokens": 40,
+      "generation_seconds": 0.06125529098790139,
+      "tokens_per_second": 653.0048156640127,
+      "stopped_at_eos": false
+    },
+    {
+      "prompt": "In the city of",
+      "prompt_oov_tokens": [],
+      "generated_text": "In the city of a large - scale population of the population was reported that the storm surge reached a peak speed of a long period . This winds damaged the storm ' s landfall along its eastern and Caribbean along the Gulf of",
+      "num_generated_tokens": 40,
+      "generation_seconds": 0.051350834022741765,
+      "tokens_per_second": 778.9552158448913,
+      "stopped_at_eos": false
+    },
+    {
+      "prompt": "The first",
+      "prompt_oov_tokens": [],
+      "generated_text": "The first two of the Royal Navy was originally built in the Austro Destroyer Flotilla , and was one of six major ships in a fleet . It was a successful assault from the French fleet during his first week , and",
+      "num_generated_tokens": 40,
+      "generation_seconds": 0.04951895901467651,
+      "tokens_per_second": 807.7714232269045,
+      "stopped_at_eos": false
+    }
+  ],
+  "total_generated_tokens": 120,
+  "total_generation_seconds": 0.16212508402531967,
+  "overall_tokens_per_second": 740.1692385939436,
+  "device": "mps"
+}

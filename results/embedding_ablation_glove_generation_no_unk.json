@@ -1,0 +1,46 @@
+{
+  "model": "embedding_ablation_lstm",
+  "embedding_strategy": "glove",
+  "checkpoint": "embedding_ablation_glove_best.pt",
+  "best_epoch": 8,
+  "generation_config": {
+    "seed": 42,
+    "max_new_tokens": 40,
+    "temperature": 1.0,
+    "top_k": 20,
+    "exclude_unk": true
+  },
+  "samples": [
+    {
+      "prompt": "The history of",
+      "prompt_oov_tokens": [],
+      "generated_text": "The history of his career in the summer and ran in the first round , and the final of the FA Trophy . They lost the club since he was a great team ' s second match in the Premier League with a",
+      "num_generated_tokens": 40,
+      "generation_seconds": 0.05967774998862296,
+      "tokens_per_second": 670.2665567590207,
+      "stopped_at_eos": false
+    },
+    {
+      "prompt": "In the city of",
+      "prompt_oov_tokens": [],
+      "generated_text": "In the city of Zagreb , and the first time of the year , and the company were still on the battlefield . The main building of the creek of the city ' s main routes with the northern terminus route to the east",
+      "num_generated_tokens": 40,
+      "generation_seconds": 0.05145604198332876,
+      "tokens_per_second": 777.3625498237816,
+      "stopped_at_eos": false
+    },
+    {
+      "prompt": "The first",
+      "prompt_oov_tokens": [],
+      "generated_text": "The first game was to make a new iteration of the game . This also praised the game having an impressive record of his second consecutive game , and a total time on the third leg at his second . They also",
+      "num_generated_tokens": 40,
+      "generation_seconds": 0.049641833000350744,
+      "tokens_per_second": 805.7720189284183,
+      "stopped_at_eos": false
+    }
+  ],
+  "total_generated_tokens": 120,
+  "total_generation_seconds": 0.16077562497230247,
+  "overall_tokens_per_second": 746.3817977424932,
+  "device": "mps"
+}

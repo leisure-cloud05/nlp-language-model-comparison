@@ -1,0 +1,46 @@
+{
+  "model": "embedding_ablation_lstm",
+  "embedding_strategy": "skipgram",
+  "checkpoint": "embedding_ablation_skipgram_best.pt",
+  "best_epoch": 8,
+  "generation_config": {
+    "seed": 42,
+    "max_new_tokens": 40,
+    "temperature": 1.0,
+    "top_k": 20,
+    "exclude_unk": false
+  },
+  "samples": [
+    {
+      "prompt": "The history of",
+      "prompt_oov_tokens": [],
+      "generated_text": "The history of the <unk> <unk> <unk> was an honorary <unk> of the <unk> . The <unk> Institute of the Church <unk> , in <unk> , the Bible of the <unk> in <unk> <unk> and the Middle Ages of a Jain on <unk>",
+      "num_generated_tokens": 40,
+      "generation_seconds": 0.059899541025515646,
+      "tokens_per_second": 667.7847495185488,
+      "stopped_at_eos": false
+    },
+    {
+      "prompt": "In the city of",
+      "prompt_oov_tokens": [],
+      "generated_text": "In the city of Pennsylvania , the city of the city , <unk> , <unk> , <unk> <unk> , <unk> , and <unk> , Kiryat and <unk> . A new <unk> , the <unk> of Forgiveness ' s Coty ' <unk> and <unk> <unk>",
+      "num_generated_tokens": 40,
+      "generation_seconds": 0.05176512501202524,
+      "tokens_per_second": 772.7210161418107,
+      "stopped_at_eos": false
+    },
+    {
+      "prompt": "The first",
+      "prompt_oov_tokens": [],
+      "generated_text": "The first and the team continued to the previous series , and the other side . The team <unk> , they held the club for a second time . He scored with one of the first - highest match for a year",
+      "num_generated_tokens": 40,
+      "generation_seconds": 0.07336329098325223,
+      "tokens_per_second": 545.2318109493127,
+      "stopped_at_eos": false
+    }
+  ],
+  "total_generated_tokens": 120,
+  "total_generation_seconds": 0.1850279570207931,
+  "overall_tokens_per_second": 648.5506403041278,
+  "device": "mps"
+}

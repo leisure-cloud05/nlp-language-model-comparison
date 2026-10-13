@@ -1,0 +1,46 @@
+{
+  "model": "embedding_ablation_lstm",
+  "embedding_strategy": "glove",
+  "checkpoint": "embedding_ablation_glove_best.pt",
+  "best_epoch": 8,
+  "generation_config": {
+    "seed": 42,
+    "max_new_tokens": 40,
+    "temperature": 1.0,
+    "top_k": 20,
+    "exclude_unk": false
+  },
+  "samples": [
+    {
+      "prompt": "The history of",
+      "prompt_oov_tokens": [],
+      "generated_text": "The history of <unk> , and the Church is currently a member of the city of <unk> in the <unk> , was a large employer of the building in the <unk> region of a new hotel houses in <unk> Province , while <unk>",
+      "num_generated_tokens": 40,
+      "generation_seconds": 0.0640846670139581,
+      "tokens_per_second": 624.1742660734699,
+      "stopped_at_eos": false
+    },
+    {
+      "prompt": "In the city of",
+      "prompt_oov_tokens": [],
+      "generated_text": "In the city of St . Petersburg . The first time , a large <unk> of the largest k , and it was a very rare and in its form of the <unk> . The city may have been <unk> since the <unk> of",
+      "num_generated_tokens": 40,
+      "generation_seconds": 0.0503332499647513,
+      "tokens_per_second": 794.7033030454472,
+      "stopped_at_eos": false
+    },
+    {
+      "prompt": "The first",
+      "prompt_oov_tokens": [],
+      "generated_text": "The first of the 20th century . The Irish church was built in 1870 for the <unk> <unk> that had no a <unk> for a year - time - <unk> , for this time , the local of <unk> <unk> to <unk>",
+      "num_generated_tokens": 40,
+      "generation_seconds": 0.04959495802177116,
+      "tokens_per_second": 806.5335992912994,
+      "stopped_at_eos": false
+    }
+  ],
+  "total_generated_tokens": 120,
+  "total_generation_seconds": 0.16401287500048056,
+  "overall_tokens_per_second": 731.6498780943167,
+  "device": "mps"
+}

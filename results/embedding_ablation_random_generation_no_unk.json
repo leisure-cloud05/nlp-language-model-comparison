@@ -1,0 +1,46 @@
+{
+  "model": "embedding_ablation_lstm",
+  "embedding_strategy": "random",
+  "checkpoint": "embedding_ablation_random_best.pt",
+  "best_epoch": 6,
+  "generation_config": {
+    "seed": 42,
+    "max_new_tokens": 40,
+    "temperature": 1.0,
+    "top_k": 20,
+    "exclude_unk": true
+  },
+  "samples": [
+    {
+      "prompt": "The history of",
+      "prompt_oov_tokens": [],
+      "generated_text": "The history of the city is a very popular structure , a large number of the church . The Missouri River in the town has a large sum of the city to be an \" , known as \" small arms \" .",
+      "num_generated_tokens": 40,
+      "generation_seconds": 0.20451212499756366,
+      "tokens_per_second": 195.5874254422642,
+      "stopped_at_eos": false
+    },
+    {
+      "prompt": "In the city of",
+      "prompt_oov_tokens": [],
+      "generated_text": "In the city of the 19th century , the area is a tropical wave . The storm had the only two airlines in the hurricane on July 31 and Avtovac . The depression strengthened into its north and the hurricane into the west .",
+      "num_generated_tokens": 40,
+      "generation_seconds": 0.05450458300765604,
+      "tokens_per_second": 733.8832405044061,
+      "stopped_at_eos": false
+    },
+    {
+      "prompt": "The first",
+      "prompt_oov_tokens": [],
+      "generated_text": "The first major league season of the season U . S . Navy . Federer had a strong defeat to return on the second round . He also won the top two players to a second drive and the game won the",
+      "num_generated_tokens": 40,
+      "generation_seconds": 0.058691083977464586,
+      "tokens_per_second": 681.5345243130739,
+      "stopped_at_eos": false
+    }
+  ],
+  "total_generated_tokens": 120,
+  "total_generation_seconds": 0.3177077919826843,
+  "overall_tokens_per_second": 377.7055616141144,
+  "device": "mps"
+}

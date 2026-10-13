@@ -1,0 +1,46 @@
+{
+  "model": "embedding_ablation_lstm",
+  "embedding_strategy": "random",
+  "checkpoint": "embedding_ablation_random_best.pt",
+  "best_epoch": 6,
+  "generation_config": {
+    "seed": 42,
+    "max_new_tokens": 40,
+    "temperature": 1.0,
+    "top_k": 20,
+    "exclude_unk": false
+  },
+  "samples": [
+    {
+      "prompt": "The history of",
+      "prompt_oov_tokens": [],
+      "generated_text": "The history of the <unk> <unk> ( \" The Moth \" ) is a \" <unk> \" and <unk> \" ( a <unk> , the <unk> ) ( <unk> <unk> ) ; in his diary in order to be in <unk> ( <unk>",
+      "num_generated_tokens": 40,
+      "generation_seconds": 0.20066958299139515,
+      "tokens_per_second": 199.332651235515,
+      "stopped_at_eos": false
+    },
+    {
+      "prompt": "In the city of",
+      "prompt_oov_tokens": [],
+      "generated_text": "In the city of <unk> , the <unk> of the <unk> <unk> of the <unk> , <unk> Castle <unk> <unk> , which is the designation of the first known <unk> <unk> . The <unk> of St Agnes is not a Grade <unk> , <unk>",
+      "num_generated_tokens": 40,
+      "generation_seconds": 0.119806292001158,
+      "tokens_per_second": 333.8722810953316,
+      "stopped_at_eos": false
+    },
+    {
+      "prompt": "The first",
+      "prompt_oov_tokens": [],
+      "generated_text": "The first of the 19th century , the kakapo was a <unk> of <unk> . The <unk> <unk> also operates , although the latter has a <unk> to <unk> <unk> <unk> with other <unk> , and can not be found to be",
+      "num_generated_tokens": 40,
+      "generation_seconds": 0.10838516597868875,
+      "tokens_per_second": 369.05419333735216,
+      "stopped_at_eos": false
+    }
+  ],
+  "total_generated_tokens": 120,
+  "total_generation_seconds": 0.4288610409712419,
+  "overall_tokens_per_second": 279.8109143424078,
+  "device": "mps"
+}

@@ -1,0 +1,18 @@
+{
+  "model": "Skip-gram Word2Vec",
+  "implementation": "gensim",
+  "corpus": "WikiText-2 training split only",
+  "vector_size": 100,
+  "window": 5,
+  "epochs": 5,
+  "negative": 5,
+  "min_count": 1,
+  "workers": 1,
+  "seed": 42,
+  "training_seconds": 23.28188633400714,
+  "learned_vocabulary_size": 19997,
+  "project_ordinary_vocabulary_size": 19996,
+  "covered_words": 19996,
+  "coverage": 1.0,
+  "checkpoint": "checkpoints/skipgram_word2vec.model"
+}
