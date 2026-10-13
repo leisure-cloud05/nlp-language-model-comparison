@@ -38,21 +38,13 @@ Evaluation covers next-token cross-entropy and perplexity, training and inferenc
 The interpolated Trigram language model has been implemented and evaluated on WikiText-2.
 
 | Metric                                     | Result           |
-
 | ------------------------------------------ | ---------------- |
-
 | Validation Perplexity                      | 264.90           |
-
 | Test Perplexity                            | 258.38           |
-
 | Training Time                              | 1.61 s           |
-
 | Serialized Model Size                      | 24.01 MiB        |
-
 | Evaluation Throughput                      | 934,666 tokens/s |
-
 | Generation Throughput (original Top-k)     | 49.3 tokens/s    |
-
 | Generation Throughput (UNK-filtered Top-k) | ~46.6 tokens/s   |
 
 The model uses recursive interpolated smoothing with document-level BOS padding. Smoothing parameters were selected using the validation split.
@@ -66,27 +58,16 @@ Text generation was evaluated using both standard Top-k sampling and UNK-filtere
 A single-layer Vanilla RNN with trainable embeddings was trained from scratch on WikiText-2 using PyTorch and the Apple Silicon MPS backend.
 
 | Metric                                     | Result                       |
-
 | ------------------------------------------ | ---------------------------- |
-
 | Trainable Parameters                       | 7,798,816                    |
-
 | Best Epoch                                 | 5 (early stopped at epoch 8) |
-
 | Validation Perplexity                      | 175.77                       |
-
 | Test Cross-Entropy                         | 5.1323                       |
-
 | Test Perplexity                            | 169.41                       |
-
 | Training and Validation Time               | 633.1 s                      |
-
 | Checkpoint Size                            | 29.75 MiB                    |
-
 | Evaluation Throughput                      | 99,931 tokens/s              |
-
 | Generation Throughput (original Top-k)     | 347.3 tokens/s               |
-
 | Generation Throughput (UNK-filtered Top-k) | 365.8 tokens/s               |
 
 The model uses 128-dimensional trainable embeddings, a 256-dimensional hidden state, and independent sequence windows of up to 64 tokens. The best checkpoint was selected using validation cross-entropy. The model was trained with a maximum of 15 epochs and early stopping (patience 3, minimum improvement 0.001 in validation cross-entropy).
@@ -100,27 +81,16 @@ Training time includes eight measured training epochs and validation passes, exc
 A single-layer LSTM with trainable embeddings was trained on WikiText-2 using PyTorch and the Apple Silicon MPS backend, following the same preprocessing and core optimization settings as the Vanilla RNN.
 
 | Metric                                     | Result                       |
-
 | ------------------------------------------ | ---------------------------- |
-
 | Trainable Parameters                       | 8,095,264                    |
-
 | Best Epoch                                 | 6 (early stopped at epoch 9) |
-
 | Validation Perplexity                      | 155.64                       |
-
 | Test Cross-Entropy                         | 5.0117                       |
-
 | Test Perplexity                            | 150.15                       |
-
 | Training and Validation Time               | 690.0 s                      |
-
 | Checkpoint Size                            | 30.88 MiB                    |
-
 | Evaluation Throughput                      | 119,519 tokens/s             |
-
 | Generation Throughput (original Top-k)     | 439.6 tokens/s               |
-
 | Generation Throughput (UNK-filtered Top-k) | 440.9 tokens/s               |
 
 The model uses 128-dimensional trainable embeddings, a 256-dimensional hidden state, and independent sequence windows of up to 64 tokens. The best checkpoint was selected using validation cross-entropy. Training used a maximum of 15 epochs with early stopping (patience 3, minimum improvement 0.001 in validation cross-entropy).
@@ -136,27 +106,16 @@ Training time includes nine measured training epochs and validation passes, excl
 A two-layer causal Transformer language model was implemented with manually constructed multi-head self-attention, causal masking, residual connections, and feed-forward blocks. Training and evaluation were performed on WikiText-2 using PyTorch and the Apple Silicon MPS backend.
 
 | Metric                                     | Result                               |
-
 | ------------------------------------------ | ------------------------------------ |
-
 | Trainable Parameters                       | 5,544,992                            |
-
 | Best Epoch                                 | 15 (maximum training budget reached) |
-
 | Validation Perplexity                      | 138.37                               |
-
 | Test Cross-Entropy                         | 4.8994                               |
-
 | Test Perplexity                            | 134.21                               |
-
 | Training and Validation Time               | 798.9 s                              |
-
 | Checkpoint Size                            | 21.16 MiB                            |
-
 | Evaluation Throughput                      | 153,416 tokens/s                     |
-
 | Generation Throughput (original Top-k)     | 203.3 tokens/s                       |
-
 | Generation Throughput (UNK-filtered Top-k) | 202.8 tokens/s                       |
 
 The Transformer uses 128-dimensional token and learned positional embeddings, two Transformer blocks, four attention heads, a feed-forward dimension of 512, and dropout of 0.1. Independent sequence windows of up to 64 tokens were used. The best checkpoint was selected using validation cross-entropy, under a maximum budget of 15 epochs and early stopping (patience 3, minimum improvement 0.001 in validation cross-entropy).
@@ -207,15 +166,10 @@ The manual implementations are separate from the benchmark models and do not cha
 All four models were evaluated using the same processed WikiText-2 splits, 20,000-word vocabulary, and valid next-token targets.
 
 | Model                | Validation PPL | Test PPL   | Test CE    | Model Size    |
-
 | -------------------- | -------------- | ---------- | ---------- | ------------- |
-
 | Interpolated Trigram | 264.90         | 258.38     | 5.5544     | 24.01 MiB     |
-
 | Vanilla RNN          | 175.77         | 169.41     | 5.1323     | 29.75 MiB     |
-
 | LSTM                 | 155.64         | 150.15     | 5.0117     | 30.88 MiB     |
-
 | Causal Transformer   | **138.37**     | **134.21** | **4.8994** | **21.16 MiB** |
 
 **Extended training and checkpoint selection.** The three neural models were trained from scratch using Adam (learning rate 0.001), batch size 16, gradient clipping at 1.0, and random seed 42, with a maximum of 15 epochs. Early stopping used patience 3 and minimum improvement 0.001 in validation cross-entropy. The checkpoint with the lowest observed validation cross-entropy was retained for test evaluation, even when an improvement was smaller than the early-stopping threshold.
@@ -307,17 +261,11 @@ The initial fixed-window next-token dataset uses a maximum of 64 target position
 ### Processed Dataset Statistics
 
 | Statistic                      | Train     | Validation | Test    |
-
 | ------------------------------ | --------- | ---------- | ------- |
-
 | Documents                      | 629       | 60         | 62      |
-
 | Token IDs                      | 2,032,891 | 212,129    | 238,414 |
-
 | OOV rate                       | 5.07%     | 7.57%      | 8.10%   |
-
 | Next-token samples (length 64) | 32,085    | 3,347      | 3,755   |
-
 | Prediction targets             | 2,032,262 | 212,069    | 238,352 |
 
 OOV rates exclude special tokens. Dataset statistics reflect the current preprocessing implementation.
