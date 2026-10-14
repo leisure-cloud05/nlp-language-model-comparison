@@ -1,6 +1,6 @@
 # Language Model Benchmarking and Representation Learning
 
-A reproducible NLP project comparing language modeling architectures, word embedding strategies, and learned representations for downstream text classification.
+An NLP project comparing language modeling architectures, input embedding strategies, and frozen representations for sentiment classification. This README records the actual configurations and results from the completed experiments; model checkpoints and large feature files are generated locally.
 
 **Topic:** Natural Language Processing for Data Science  
 
@@ -8,7 +8,7 @@ A reproducible NLP project comparing language modeling architectures, word embed
 
 **Dataset:** WikiText-2 (raw)  
 
-**Status:** Parts I–III completed, including language model benchmarking, embedding ablation, and IMDb downstream representation analysis. Final report preparation is in progress.
+**Status:** Parts I–III experiments completed. Final benchmark metrics below were checked against the saved `results/*_final.json`, training histories, and IMDb test results. The written report is maintained separately.
 
 ## 1. Project Overview
 
@@ -41,9 +41,9 @@ The interpolated Trigram language model has been implemented and evaluated on Wi
 | ------------------------------------------ | ---------------- |
 | Validation Perplexity                      | 264.90           |
 | Test Perplexity                            | 258.38           |
-| Training Time                              | 1.61 s           |
+| Training Time                              | 1.56 s           |
 | Serialized Model Size                      | 24.01 MiB        |
-| Evaluation Throughput                      | 934,666 tokens/s |
+| Evaluation Throughput                      | 844,996 tokens/s |
 | Generation Throughput (original Top-k)     | 49.3 tokens/s    |
 | Generation Throughput (UNK-filtered Top-k) | ~46.6 tokens/s   |
 
@@ -161,9 +161,21 @@ The main LSTM benchmark uses PyTorch's optimized `nn.LSTM` for training and effi
 
 The manual implementations are separate from the benchmark models and do not change the reported training or evaluation results.
 
+#### Training and Inference Efficiency
+
+The table below uses one consistent definition of each time metric rather than mixing training-only and training-plus-validation totals.
+
+| Model | Completed epochs (best) | Training only (s) | Validation (s) | Training + validation (s) | Test targets/s |
+|---|---:|---:|---:|---:|---:|
+| RNN | 8 (5) | 615.5 | 17.6 | 633.1 | 99,931 |
+| LSTM | 9 (6) | 672.5 | 17.5 | 690.0 | 119,519 |
+| Transformer | 15 (15) | 778.8 | 20.2 | 798.9 | 153,416 |
+
+The same test scoring workload contains **238,352 target tokens** for every Part I model. Different effective epoch counts mean the total running times are not equal-training-budget comparisons. Transformer scoring can evaluate tokens in parallel, while generation is autoregressive; the present Transformer generator does not cache past K/V projections.
+
 #### Language Model Comparison Summary
 
-All four models were evaluated using the same processed WikiText-2 splits, 20,000-word vocabulary, and valid next-token targets.
+All four models were evaluated on the same processed WikiText-2 splits, a vocabulary of 20,000 entries (including four special tokens), and the same 238,352 valid test prediction targets.
 
 | Model                | Validation PPL | Test PPL   | Test CE    | Model Size    |
 | -------------------- | -------------- | ---------- | ---------- | ------------- |
@@ -214,6 +226,16 @@ All three models were selected by minimum validation cross-entropy and then eval
 
 Both frozen pretrained configurations achieved lower test perplexity than the random trainable baseline: approximately **10.63%** lower for Skip-gram and **10.57%** lower for GloVe. Skip-gram and GloVe differ by just 0.10 test perplexity points; one seed does not establish a statistically reliable difference.
 
+#### Training Cost and Vocabulary Coverage
+
+| Setting | Epochs (best) | LM training only (s) | LM validation (s) | LM training + validation (s) | Extra embedding pretraining |
+|---|---:|---:|---:|---:|---:|
+| Random trainable | 9 (6) | 640.4 | 16.9 | 657.4 | None |
+| Skip-gram frozen | 11 (8) | 726.0 | 20.2 | 746.2 | 23.28 s (gensim) |
+| GloVe frozen | 11 (8) | 782.6 | 22.6 | 805.2 | Public model (not locally trained) |
+
+GloVe lookup is measured over **19,996 ordinary vocabulary entries**: 12,954 exact matches, 6,784 lowercase matches, and 258 unmatched entries (98.71% coverage). The unmatched entries use seeded random vectors; the special-token handling is separate. Skip-gram has 19,996 exact matches (100% coverage). The three setups are a comparison of **complete embedding choices**, because the randomly initialized embedding matrix is trainable while both pretrained matrices are frozen.
+
 #### Text Generation
 
 Text generation reuses Part I's LSTM generation procedure with three fixed prompts (`The history of`, `In the city of`, and `The first`), random seed 42, temperature 1.0, top-k 20, and a maximum of 40 new tokens. Both original Top-k sampling and UNK-filtered Top-k sampling were evaluated, yielding 18 samples in total.
@@ -256,6 +278,17 @@ All test results were evaluated on the same 25,000 official IMDb test examples. 
 **Findings.** Mean pooling substantially improved LSTM downstream accuracy over using the final hidden state. A moderate window overlap (stride 32) improved validation accuracy for the LSTM, but increasing overlap to stride 16 did not provide further gains. Although the Transformer achieved lower language-model perplexity in Part I, this did not consistently translate into better frozen-representation sentiment classification.
 
 The LSTM stride-32 configuration was selected by validation performance, whereas token-weighted mean pooling achieved the highest numerical test accuracy. Test results were not used to revise the model-selection decision.
+
+#### Selected-model confusion matrices
+
+Rows give the true IMDb sentiment and columns the predicted sentiment (the official test set has 12,500 reviews per class).
+
+| Frozen feature extractor | True negative → negative | True negative → positive | True positive → negative | True positive → positive |
+|---|---:|---:|---:|---:|
+| LSTM, stride 32 | 9,009 | 3,491 | 3,619 | 8,881 |
+| Transformer, stride 32 | 9,045 | 3,455 | 3,895 | 8,605 |
+
+Thus Transformer correctly identifies **36 more negative reviews**, but **276 fewer positive reviews**, than LSTM. Across the same 25,000 test examples, both are correct on 14,737; both are incorrect on 4,197; only LSTM is correct on 3,153; and only Transformer is correct on 2,913. These paired counts sum to 25,000 and match the final accuracy difference.
 
 #### Error Analysis
 
@@ -307,41 +340,52 @@ OOV rates exclude special tokens. Dataset statistics reflect the current preproc
 ```text
 nlp-language-model-comparison/
 ├── README.md
-├── checkpoints/                 # Local model artifacts, excluded from Git
-├── configs/
-├── data/
-│   └── processed/               # Generated locally, excluded from Git
-├── docs/
-│   └── experiment_log.md        # Local private notes, excluded from Git
-├── reports/                     # Final report
-├── results/                     # Tracked experiment JSONs / figures
+├── .gitignore
+├── results/
+│   ├── ngram_*.json
+│   ├── rnn_*.json
+│   ├── lstm_*.json
+│   ├── transformer_*.json
+│   ├── embedding_ablation_*.json
+│   ├── skipgram_training.json
+│   ├── imdb_*_probe.json
+│   ├── imdb_*_test.json
+│   ├── figures/
+│   ├── samples/
+│   └── tables/
 ├── scripts/
 │   ├── run_ngram.py
 │   ├── evaluate_ngram.py
 │   ├── generate_ngram.py
-│   ├── smoke_test_rnn.py
 │   ├── train_rnn.py
 │   ├── evaluate_rnn.py
 │   ├── generate_rnn.py
-│   ├── smoke_test_lstm.py
 │   ├── train_lstm.py
 │   ├── evaluate_lstm.py
 │   ├── generate_lstm.py
-│   ├── smoke_test_transformer.py
 │   ├── train_transformer.py
 │   ├── evaluate_transformer.py
 │   ├── generate_transformer.py
 │   ├── train_word2vec.py
 │   ├── train_embedding_ablation.py
 │   ├── evaluate_embedding_ablation.py
-│   └── generate_embedding_ablation.py
+│   ├── generate_embedding_ablation.py
+│   ├── prepare_imdb.py
+│   ├── extract_imdb_features.py
+│   ├── extract_imdb_overlap_features.py
+│   ├── train_imdb_probe.py
+│   ├── train_imdb_mlp.py
+│   ├── evaluate_imdb_test.py
+│   ├── experiment_imdb_overlap.py
+│   └── smoke_test_*.py
 ├── src/
 │   ├── data/
 │   │   ├── prepare_data.py
 │   │   ├── analyze_data.py
 │   │   ├── inspect_headings.py
 │   │   ├── preprocess.py
-│   │   └── lm_dataset.py
+│   │   ├── lm_dataset.py
+│   │   └── imdb_preprocess.py
 │   ├── models/
 │   │   ├── ngram.py
 │   │   ├── rnn.py
@@ -349,13 +393,14 @@ nlp-language-model-comparison/
 │   │   ├── lstm.py
 │   │   ├── lstm_from_scratch.py
 │   │   ├── transformer.py
-│   │   └── embedding_lstm.py
-│   ├── embeddings/
-│   │   ├── word2vec.py
-│   │   ├── embedding_utils.py
-│   │   └── skipgram_from_scratch.py
-│   ├── training/
-│   └── evaluation/
+│   │   ├── embedding_lstm.py
+│   │   ├── checkpoint_loader.py
+│   │   ├── representation_extractor.py
+│   │   └── imdb_mlp.py
+│   └── embeddings/
+│       ├── word2vec.py
+│       ├── skipgram_from_scratch.py
+│       └── embedding_utils.py
 └── tests/
     ├── test_lm_dataset.py
     ├── test_ngram.py
@@ -368,44 +413,39 @@ nlp-language-model-comparison/
     └── test_skipgram_from_scratch.py
 ```
 
-Some directories are reserved for future development. Trained checkpoints and downloaded external embeddings are not committed to the repository.
+### Local Files and Reproducibility
+
+Large datasets, processed features, model checkpoints, and private development notes are stored locally and excluded from Git.
+
+The repository includes the saved experiment metrics in `results/`. For Part III, `lstm_overlap` and `transformer_overlap` refer to stride-32 features, while `lstm_stride16` and `transformer_stride16` refer to stride-16 features.
 
 ## 5. Environment
 
-Development environment:
+Experiments were conducted on macOS with Apple Silicon.
 
-- macOS, Apple Silicon
 - Python 3.11
-- PyTorch 2.14.0
+- PyTorch 2.14.0 (MPS backend)
 - Hugging Face Datasets 5.1.0
 - Conda environment: `torch_env`
-- PyTorch MPS backend available
 
-Core numerical and data-processing libraries are managed through conda-forge. PyTorch is installed through pip inside the Conda environment.
+Other dependencies include NumPy, scikit-learn, gensim,
+and matplotlib.
 
-### Current Data Preparation Commands
+### Data Preparation
 
-From the repository root:
+Run the following commands from the repository root:
 
 ```bash
-
 conda activate torch_env
 
 python src/data/prepare_data.py
-
 python src/data/analyze_data.py
-
 python src/data/inspect_headings.py
-
 python src/data/preprocess.py
-
 python tests/test_lm_dataset.py
-
 ```
 
-The scripts use Hugging Face Datasets to obtain the corpus. Running the preprocessing script generates the encoded documents and vocabulary under `data/processed/`.
-
-Complete dependency specifications and additional model training commands will be documented as experiments are implemented.
+The preprocessing pipeline builds the vocabulary from the WikiText-2 training split and saves the processed datasets under `data/processed/`
 
 ### Trigram Experiment Commands
 
@@ -665,7 +705,12 @@ python -m scripts.extract_imdb_overlap_features --model lstm --split train --str
 python -m scripts.extract_imdb_overlap_features --model lstm --split validation --stride 32
 ```
 
-The overlap extraction script stores new files under stride-specific names. The original stride-32 features used in this study were saved under the `lstm_overlap` and `transformer_overlap` names; match the feature filenames to the probe model names before training.
+For overlapping-window representations, the window size is 64 tokens.
+
+- `lstm_overlap` and `transformer_overlap` use stride 32.
+- `lstm_stride16` and `transformer_stride16` use stride 16.
+
+These identifiers correspond to four configurations within the 11 evaluated IMDb representations.
 
 **3. Train linear probes**
 
@@ -705,7 +750,8 @@ The evaluation script loads the corresponding saved classifier without refitting
 - [x] Train and evaluate causal Transformer
 - [x] Complete embedding ablation experiments
 - [x] Evaluate downstream representations
-- [ ] Finalize reproducibility documentation and report
+- [x] Record and audit final experiment metrics
+- [ ] Finalize the submitted report
 
 
 ## 7. Reproducibility and Limitations
@@ -740,8 +786,9 @@ Multiple representation extraction strategies were explored using the same valid
 - PyTorch: [Official Website](https://pytorch.org/)
 - Hugging Face Datasets: [Documentation](https://huggingface.co/docs/datasets/)
 
-This project explores language modeling, word embeddings, and representation learning through reproducible experiments. Standard libraries, documentation, and AI-assisted coding support are used during development. External assistance and implementation references will be documented in the project documentation.
+This project uses PyTorch, Hugging Face Datasets, gensim, scikit-learn, and related numerical libraries. ChatGPT was used for development assistance, explanations, debugging, and report editing. Experiments were run locally, and the final numeric metrics in this README were verified against saved results. Public GloVe embeddings are used only in Part II.
 
-## 9. License
 
-No license has been assigned at this stage. The repository is currently maintained as a private research project.
+## 8. License
+
+No license has been assigned to this repository. All rights are reserved unless a license is added.

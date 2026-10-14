@@ -30,6 +30,8 @@ MODEL_NAMES = [
     "transformer_overlap",
     "lstm_stride16",
     "transformer_stride16",
+    "lstm_stride32",
+    "transformer_stride32",
 ]
 
 C_VALUES = [0.01, 0.1, 1.0, 10.0, 100.0]

@@ -162,9 +162,14 @@ def main():
         print("\nSmoke test completed. No file saved.")
         return
 
+    if args.stride == 32:
+        feature_name = f"{args.model}_overlap"
+    else:
+        feature_name = f"{args.model}_stride16"
+
     output_path = DATA_DIR / (
-    f"imdb_{args.model}_stride{args.stride}_{args.split}_features.npz"
-)
+        f"imdb_{feature_name}_{args.split}_features.npz"
+    )
 
     if output_path.exists():
         raise FileExistsError(

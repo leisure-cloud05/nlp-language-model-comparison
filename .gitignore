@@ -248,3 +248,6 @@ __marimo__/
 
 # IMDb per-review predictions (retained locally)
 results/*_test_predictions.npz
+
+# Local report source archives
+assignment_report_sources*.zip
