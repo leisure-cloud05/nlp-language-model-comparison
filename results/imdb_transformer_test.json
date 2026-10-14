@@ -1,0 +1,22 @@
+{
+  "model": "transformer",
+  "dataset": "stanfordnlp/imdb",
+  "split": "test",
+  "num_samples": 25000,
+  "accuracy": 0.6988,
+  "macro_f1": 0.6987228730555022,
+  "confusion_matrix": [
+    [
+      8935,
+      3565
+    ],
+    [
+      3965,
+      8535
+    ]
+  ],
+  "label_order": [
+    0,
+    1
+  ]
+}

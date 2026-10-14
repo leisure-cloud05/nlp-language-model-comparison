@@ -1,0 +1,40 @@
+{
+  "model": "lstm_overlap",
+  "task": "imdb_binary_sentiment",
+  "seed": 42,
+  "train_size": 20000,
+  "validation_size": 5000,
+  "feature_dim": 256,
+  "classifier": "StandardScaler + LogisticRegression",
+  "selection_metric": "validation_macro_f1",
+  "best_C": 0.1,
+  "best_validation_accuracy": 0.7216,
+  "best_validation_macro_f1": 0.7215214022005572,
+  "trials": [
+    {
+      "C": 0.01,
+      "validation_accuracy": 0.7178,
+      "validation_macro_f1": 0.7177493190677318
+    },
+    {
+      "C": 0.1,
+      "validation_accuracy": 0.7216,
+      "validation_macro_f1": 0.7215214022005572
+    },
+    {
+      "C": 1.0,
+      "validation_accuracy": 0.7208,
+      "validation_macro_f1": 0.7207320373486092
+    },
+    {
+      "C": 10.0,
+      "validation_accuracy": 0.7208,
+      "validation_macro_f1": 0.7207285064976634
+    },
+    {
+      "C": 100.0,
+      "validation_accuracy": 0.7206,
+      "validation_macro_f1": 0.7205302331674079
+    }
+  ]
+}

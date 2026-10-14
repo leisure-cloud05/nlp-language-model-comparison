@@ -1,0 +1,40 @@
+{
+  "model": "transformer_stride16",
+  "task": "imdb_binary_sentiment",
+  "seed": 42,
+  "train_size": 20000,
+  "validation_size": 5000,
+  "feature_dim": 128,
+  "classifier": "StandardScaler + LogisticRegression",
+  "selection_metric": "validation_macro_f1",
+  "best_C": 10.0,
+  "best_validation_accuracy": 0.709,
+  "best_validation_macro_f1": 0.7089537935042567,
+  "trials": [
+    {
+      "C": 0.01,
+      "validation_accuracy": 0.7052,
+      "validation_macro_f1": 0.7051167721577738
+    },
+    {
+      "C": 0.1,
+      "validation_accuracy": 0.708,
+      "validation_macro_f1": 0.7079459816887732
+    },
+    {
+      "C": 1.0,
+      "validation_accuracy": 0.7086,
+      "validation_macro_f1": 0.7085507450759179
+    },
+    {
+      "C": 10.0,
+      "validation_accuracy": 0.709,
+      "validation_macro_f1": 0.7089537935042567
+    },
+    {
+      "C": 100.0,
+      "validation_accuracy": 0.709,
+      "validation_macro_f1": 0.7089537935042567
+    }
+  ]
+}

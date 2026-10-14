@@ -219,32 +219,32 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
-# macOS
-.DS_Store
-
-# Dataset files
+# Datasets and generated preprocessing artifacts
 /data/raw/
 /data/processed/
 /data/cache/
 
-# Model checkpoints
+# Model checkpoints and exported weights
+/checkpoints/
 *.pt
 *.pth
 *.ckpt
+*.safetensors
+*.onnx
 
-# Local experiment logs
+# Local training logs
 /logs/
 /runs/
 
-# macOS
-.DS_Store
+# Private experiment notes
+/docs/experiment_log.md
 
 # Environment variables and credentials
 .env
 .env.*
 
-# Personal experiment notes
-/docs/experiment_log.md
+# macOS metadata
+.DS_Store
 
-# Checkpoints
-/checkpoints/
+# IMDb per-review predictions (retained locally)
+results/*_test_predictions.npz

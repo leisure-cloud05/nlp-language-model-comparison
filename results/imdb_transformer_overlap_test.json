@@ -1,0 +1,22 @@
+{
+  "model": "transformer_overlap",
+  "dataset": "stanfordnlp/imdb",
+  "split": "test",
+  "num_samples": 25000,
+  "accuracy": 0.706,
+  "macro_f1": 0.7059089023415894,
+  "confusion_matrix": [
+    [
+      9045,
+      3455
+    ],
+    [
+      3895,
+      8605
+    ]
+  ],
+  "label_order": [
+    0,
+    1
+  ]
+}

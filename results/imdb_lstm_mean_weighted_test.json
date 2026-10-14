@@ -1,0 +1,22 @@
+{
+  "model": "lstm_mean_weighted",
+  "dataset": "stanfordnlp/imdb",
+  "split": "test",
+  "num_samples": 25000,
+  "accuracy": 0.71816,
+  "macro_f1": 0.7181594787077719,
+  "confusion_matrix": [
+    [
+      8994,
+      3506
+    ],
+    [
+      3540,
+      8960
+    ]
+  ],
+  "label_order": [
+    0,
+    1
+  ]
+}

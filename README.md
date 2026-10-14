@@ -8,7 +8,7 @@ A reproducible NLP project comparing language modeling architectures, word embed
 
 **Dataset:** WikiText-2 (raw)  
 
-**Status:** Part I language model benchmarking and Part II embedding ablation completed; Part III downstream representation analysis pending.
+**Status:** Parts I–III completed, including language model benchmarking, embedding ablation, and IMDb downstream representation analysis. Final report preparation is in progress.
 
 ## 1. Project Overview
 
@@ -227,11 +227,43 @@ Filtering `<unk>` improves readability, but generated text can still contain rep
 
 **Interpretation and limitations:** This is a comparison of complete embedding strategies, **not** an isolated causal test of pretraining. Random embeddings are trainable while Skip-gram/GloVe embeddings are frozen, producing a difference of two million trainable parameters. The training corpora also differ for self-trained Skip-gram and public GloVe. The reported results are from a single random seed and limited qualitative generation samples.
 
-### 2.3 Downstream Representation Analysis
+### 2.3 Downstream Representation Analysis — Completed
 
-Representations from previously trained language models will be evaluated using a supervised text classification task.
+**Task.** Binary sentiment classification on IMDb using frozen representations extracted from the LSTM and causal Transformer trained in Part I. The official IMDb training split (25,000 reviews) was divided into 20,000 training and 5,000 validation examples using a stratified split with random seed 42. The official test split (25,000 reviews) was reserved for final evaluation.
 
-At least two representation methods will be compared using a consistent classifier and evaluation protocol.
+**Representation extraction.** Reviews were cleaned and tokenized using the Part I tokenizer and vocabulary. Each review was truncated to at most 768 tokens and processed in windows of 64 tokens. The pretrained language-model weights remained frozen throughout downstream experiments. We evaluated final hidden-state representations, mean pooling, token-weighted mean pooling, mean-plus-max pooling, and overlapping windows with strides of 32 and 16 tokens.
+
+**Classification.** Extracted features were standardized using a `StandardScaler` fitted on training data only. Logistic Regression classifiers were trained on the frozen features, with regularization strength selected from `C ∈ {0.01, 0.1, 1, 10, 100}` using validation macro F1. Additional small MLP experiments were conducted as exploratory classifier comparisons; they were not included in the final saved-probe test benchmark.
+
+#### Final IMDb Classification Results
+
+| Model and Representation | Validation Accuracy | Test Accuracy | Test Macro F1 |
+|---|---:|---:|---:|
+| LSTM — Final state | 58.06% | 57.83% | 57.83% |
+| LSTM — Mean pooling | 71.00% | 70.83% | 70.83% |
+| LSTM — Token-weighted mean | 71.34% | **71.82%** | 71.82% |
+| LSTM — Mean + Max | 70.30% | 70.49% | 70.49% |
+| LSTM — Overlap, stride 32 | **72.16%** | 71.56% | 71.56% |
+| LSTM — Overlap, stride 16 | 71.32% | 71.34% | 71.33% |
+| Transformer — Mean pooling | 71.16% | 69.88% | 69.87% |
+| Transformer — Token-weighted mean | 70.48% | 70.42% | 70.41% |
+| Transformer — Mean + Max | 70.82% | 69.74% | 69.73% |
+| Transformer — Overlap, stride 32 | **71.20%** | 70.60% | 70.59% |
+| Transformer — Overlap, stride 16 | 70.90% | 70.77% | 70.76% |
+
+All test results were evaluated on the same 25,000 official IMDb test examples. Saved predictions were independently checked against the reported accuracy, macro F1, and confusion matrices.
+
+**Findings.** Mean pooling substantially improved LSTM downstream accuracy over using the final hidden state. A moderate window overlap (stride 32) improved validation accuracy for the LSTM, but increasing overlap to stride 16 did not provide further gains. Although the Transformer achieved lower language-model perplexity in Part I, this did not consistently translate into better frozen-representation sentiment classification.
+
+The LSTM stride-32 configuration was selected by validation performance, whereas token-weighted mean pooling achieved the highest numerical test accuracy. Test results were not used to revise the model-selection decision.
+
+#### Error Analysis
+
+We compared the stride-32 LSTM and Transformer predictions on the official IMDb test set. Both models were correct on 14,737 reviews and wrong on 4,197. The LSTM alone was correct on 3,153 reviews, while the Transformer alone was correct on 2,913.
+
+Qualitative inspection revealed challenging cases involving explicit sentiment words, mixed positive and negative expressions, and negation. These observations are illustrative rather than causal evidence of specific model failures.
+
+**Limitations.** The language models were pretrained on WikiText-2 rather than IMDb and were not fine-tuned for sentiment classification. Reviews were truncated at 768 tokens, and each 64-token window was encoded independently. Multiple representation variants were explored on the same validation set; consequently, small performance differences should be interpreted cautiously.
 
 ## 3. Dataset and Preprocessing
 
@@ -604,6 +636,59 @@ python -u scripts/generate_embedding_ablation.py
 
 Set `EXCLUDE_UNK = False` in `scripts/generate_embedding_ablation.py` for original Top-k sampling, or `EXCLUDE_UNK = True` for UNK-filtered Top-k sampling; the modes write separate JSON files. The three training histories, test summaries, and two generation-mode results per model are saved under `results/`. Best checkpoints and the locally trained Gensim model are stored under `checkpoints/` and are excluded from Git.
 
+### Part III — IMDb Downstream Classification Commands
+
+Part III uses frozen LSTM and Transformer checkpoints from Part I. All experiments use the same IMDb train/validation split and evaluate classification using accuracy and macro F1.
+
+**1. Prepare IMDb data and split indices**
+
+```bash
+python -m scripts.prepare_imdb
+```
+
+**2. Extract frozen language-model features**
+
+Examples for the original non-overlapping representations:
+
+```bash
+python -m scripts.extract_imdb_features --model lstm_mean --split train
+python -m scripts.extract_imdb_features --model lstm_mean --split validation
+
+python -m scripts.extract_imdb_features --model transformer --split train
+python -m scripts.extract_imdb_features --model transformer --split validation
+```
+
+For overlapping representations, extract the training and validation features using the same stride:
+
+```bash
+python -m scripts.extract_imdb_overlap_features --model lstm --split train --stride 32
+python -m scripts.extract_imdb_overlap_features --model lstm --split validation --stride 32
+```
+
+The overlap extraction script stores new files under stride-specific names. The original stride-32 features used in this study were saved under the `lstm_overlap` and `transformer_overlap` names; match the feature filenames to the probe model names before training.
+
+**3. Train linear probes**
+
+```bash
+python -m scripts.train_imdb_probe --model lstm_mean
+python -m scripts.train_imdb_probe --model transformer
+```
+
+The same script supports the other saved representation variants, including weighted pooling, mean-plus-max pooling, and stride-specific overlapping windows.
+
+**4. Evaluate on the official IMDb test set**
+
+```bash
+python -m scripts.evaluate_imdb_test --model lstm_mean
+python -m scripts.evaluate_imdb_test --model lstm_overlap
+python -m scripts.evaluate_imdb_test --model transformer
+python -m scripts.evaluate_imdb_test --model transformer_overlap
+```
+
+The evaluation script loads the corresponding saved classifier without refitting it, extracts or reuses cached test features, and saves accuracy, macro F1, confusion matrices, and prediction records.
+
+**Reproducibility notes:** Checkpoints and processed feature matrices are generated locally and excluded from Git. Training and feature-extraction scripts protect existing outputs from accidental overwriting. To reproduce an experiment from scratch, follow the data-preparation, feature-extraction, probe-training, and test-evaluation order using the appropriate representation name.
+
 ## 6. Current Progress
 
 - [x] Initialize GitHub repository
@@ -619,18 +704,35 @@ Set `EXCLUDE_UNK = False` in `scripts/generate_embedding_ablation.py` for origin
 - [x] Train and evaluate LSTM
 - [x] Train and evaluate causal Transformer
 - [x] Complete embedding ablation experiments
-- [ ] Evaluate downstream representations
+- [x] Evaluate downstream representations
 - [ ] Finalize reproducibility documentation and report
+
 
 ## 7. Reproducibility and Limitations
 
-The vocabulary is built only from the training split, and document boundaries are preserved in next-token sample construction.
+### Reproducibility
 
-The dataset treats fixed windows independently: recurrent hidden states are reset for each window, and the Transformer uses causal attention over at most 64 input tokens. This short word-level context and the fixed 20,000-word vocabulary constrain generation quality.
+All three project parts use documented preprocessing, model configurations, evaluation procedures, and fixed random seeds where applicable. The WikiText-2 vocabulary is constructed from training data only, and document boundaries are preserved when generating next-token samples.
 
-The preprocessing pipeline discards heading text and uses document-level beginning and end markers. This is a deliberate simplification and may affect language modeling results.
+Part III uses the official IMDb dataset. The original training split is divided into 20,000 training and 5,000 validation reviews using stratified sampling with random seed 42. The official 25,000-review test split is reserved for final evaluation.
 
-Random seeds, hyperparameters, evaluation settings, and reported metrics are documented for Parts I and II. Local trained checkpoints and large pretrained embedding assets are excluded from Git, so reproducing results requires obtaining the data and running the training commands. Evaluation timing reflects the current Apple Silicon MPS environment. Part II does not isolate embedding initialization from freezing and is based on a single random seed.
+The LSTM and Transformer checkpoints trained in Part I remain frozen during downstream representation extraction. The feature standardizer is fitted exclusively on the IMDb training features. Logistic Regression regularization is selected using validation macro F1, and the official test set is not used for hyperparameter tuning.
+
+Final test predictions and metrics are saved for reproducibility. Accuracy, macro F1, confusion matrices, and sample alignment were independently checked across all 11 probe configurations.
+
+Large processed datasets, feature matrices, and trained checkpoints are excluded from Git. Reproducing the experiments requires obtaining the datasets and running the documented preprocessing, training, feature extraction, and evaluation commands.
+
+### Limitations
+
+**Language modeling.** The models use a word-level vocabulary of 20,000 tokens and a maximum context length of 64 tokens. Fixed windows are processed independently, and recurrent hidden states are reset between windows. Heading text is discarded, and document-level beginning and end markers are used. These design choices may limit language modeling and generation quality.
+
+**Embedding ablation.** The Part II experiments use a single random seed and do not fully isolate embedding initialization from whether embeddings are frozen or trainable.
+
+**Downstream classification.** The language models are pretrained on WikiText-2 rather than sentiment-specific data and are not fine-tuned on IMDb. Reviews are truncated to 768 tokens, and individual windows are encoded independently. The downstream experiments compare frozen representations rather than end-to-end sentiment fine-tuning.
+
+Multiple representation extraction strategies were explored using the same validation set. Consequently, small differences between validation results may reflect model-selection variability. Test results are reported without further hyperparameter tuning.
+
+**Compute environment.** Reported training and inference times reflect the Apple Silicon MPS environment and may differ on other hardware.
 
 ## 8. Data Sources and Acknowledgments
 

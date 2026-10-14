@@ -1,0 +1,40 @@
+{
+  "model": "lstm_mean_weighted",
+  "task": "imdb_binary_sentiment",
+  "seed": 42,
+  "train_size": 20000,
+  "validation_size": 5000,
+  "feature_dim": 256,
+  "classifier": "StandardScaler + LogisticRegression",
+  "selection_metric": "validation_macro_f1",
+  "best_C": 10.0,
+  "best_validation_accuracy": 0.7134,
+  "best_validation_macro_f1": 0.7133653172033816,
+  "trials": [
+    {
+      "C": 0.01,
+      "validation_accuracy": 0.7114,
+      "validation_macro_f1": 0.7113598097399082
+    },
+    {
+      "C": 0.1,
+      "validation_accuracy": 0.713,
+      "validation_macro_f1": 0.7129626966320544
+    },
+    {
+      "C": 1.0,
+      "validation_accuracy": 0.7134,
+      "validation_macro_f1": 0.7133600882586891
+    },
+    {
+      "C": 10.0,
+      "validation_accuracy": 0.7134,
+      "validation_macro_f1": 0.7133653172033816
+    },
+    {
+      "C": 100.0,
+      "validation_accuracy": 0.7134,
+      "validation_macro_f1": 0.713362748622811
+    }
+  ]
+}

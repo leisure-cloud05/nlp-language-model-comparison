@@ -1,0 +1,22 @@
+{
+  "model": "transformer_stride16",
+  "dataset": "stanfordnlp/imdb",
+  "split": "test",
+  "num_samples": 25000,
+  "accuracy": 0.70772,
+  "macro_f1": 0.7076170994637042,
+  "confusion_matrix": [
+    [
+      9081,
+      3419
+    ],
+    [
+      3888,
+      8612
+    ]
+  ],
+  "label_order": [
+    0,
+    1
+  ]
+}
