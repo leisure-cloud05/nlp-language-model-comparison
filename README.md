@@ -341,6 +341,8 @@ OOV rates exclude special tokens. Dataset statistics reflect the current preproc
 nlp-language-model-comparison/
 ├── README.md
 ├── .gitignore
+├── reports/
+│   └── nlp-comparison-report.pdf
 ├── results/
 │   ├── ngram_*.json
 │   ├── rnn_*.json
@@ -751,7 +753,7 @@ The evaluation script loads the corresponding saved classifier without refitting
 - [x] Complete embedding ablation experiments
 - [x] Evaluate downstream representations
 - [x] Record and audit final experiment metrics
-- [ ] Finalize the submitted report
+- [x] Finalize the submitted report
 
 
 ## 7. Reproducibility and Limitations
